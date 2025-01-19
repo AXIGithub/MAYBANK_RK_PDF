@@ -31,5 +31,15 @@ public class LogController {
         setConnection();
         log.createdbKanwil(path, stmt);
     }
+
+    public Connection getKoneksi1() {
+        return koneksi1;
+    }
+
+    public Statement getStmt() {
+        return stmt;
+    }
+    
+    
     
 }

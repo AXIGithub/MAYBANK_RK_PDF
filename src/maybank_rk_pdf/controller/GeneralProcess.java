@@ -5,10 +5,12 @@
  */
 package maybank_rk_pdf.controller;
 
+import com.mysql.jdbc.Statement;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import maybank_rk_pdf.model.Connection;
 
 /**
  *
@@ -29,6 +31,9 @@ public class GeneralProcess {
     private String directoryResource = new String();
     private String directoryNormal = new String();
     private String inputDir = new String();
+    
+    protected com.mysql.jdbc.Connection koneksi, koneksi1;
+    protected Statement stmt, stmt1;
     
     public GeneralProcess(String[] params){
         inputDir = params[0];
@@ -73,5 +78,16 @@ public class GeneralProcess {
     
     public void setResource(){
         directoryResource = currentDirectory + "////" + "RESOURCES" + "////";
+    }
+    
+    public void getConnection(){
+        try {
+            Connection connection = new Connection();
+            connection.setConnection();
+            koneksi = connection.getKoneksi();
+            stmt = connection.getStmt();
+        } catch (SQLException ex) {
+            Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

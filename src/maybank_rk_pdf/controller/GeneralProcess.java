@@ -37,6 +37,7 @@ public class GeneralProcess {
     
     public GeneralProcess(String[] params){
         inputDir = params[0];
+        getConnection();
     }
     
      public void doInProcess() throws SQLException{
@@ -49,7 +50,7 @@ public class GeneralProcess {
             Directory dirPdf = new Directory();
             PdfProcessing processing = new PdfProcessing();
             dirPdf.scanPdfFile(inputDir);
-            processing.runProcesing(dirPdf, inputDir, inputDir, cycle);
+            processing.runProcesing(dirPdf, inputDir, inputDir, cycle, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

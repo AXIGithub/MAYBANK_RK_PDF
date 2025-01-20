@@ -6,6 +6,7 @@
 package maybank_rk_pdf.controller;
 
 import java.io.IOException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -13,12 +14,12 @@ import java.util.ArrayList;
  * @author Ratino
  */
 public class PdfProcessing {
-    public void runProcesing(Directory dirPdf,String DirectoryInput, String parentInput, String type) throws IOException{
-        getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", type);
+    public void runProcesing(Directory dirPdf,String DirectoryInput, String parentInput, String type, Statement stmt) throws IOException{
+        getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", type, stmt);
                 
     }
     
-    public ArrayList<String> getLogOnePdf(Directory dirPdf, String DirectoryInput, String parentInput, String prodByCb, String typeProduct) throws IOException{
+    public ArrayList<String> getLogOnePdf(Directory dirPdf, String DirectoryInput, String parentInput, String prodByCb, String typeProduct, Statement stmt) throws IOException{
         WriteLogPdf logPdf = new WriteLogPdf();
         ArrayList<String> logComponent = new ArrayList<String>(10);
         logComponent.add(""); //Jml Page
@@ -37,6 +38,10 @@ public class PdfProcessing {
         }
         System.exit(0);
         return null;
+    }
+    
+    public void uploadLogToDb(String pathLog, Statement stmt){
+        
     }
     
     

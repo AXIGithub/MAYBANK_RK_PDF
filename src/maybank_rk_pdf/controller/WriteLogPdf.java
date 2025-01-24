@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -140,7 +141,7 @@ public class WriteLogPdf {
                 }
             }
    
-            String barcode = ""+logComponent.get(0);
+            String barcode = "BARCODE"; //+logComponent.get(0);
             barcode = barcode.replace("*", "");
             String nama = ""+logComponent.get(1);
             if (logComponent.get(6).isEmpty() == true) logComponent.set(6,logComponent.get(5));
@@ -163,7 +164,7 @@ public class WriteLogPdf {
 //            out.write(barcode+"\t"+polis+"\t"+nama+"\t"+jenisGrupKartu+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+seqPStr +"\t"+ ""+seqCStr +"\t"+ ""+seqEStr +"\t"+jenisAmplop+"\t"+area+"\t"+totalHal+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
             out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+"seqPStr" +"\t"+ ""+"seqCStr" +"\t"+ ""+"seqEStr" +"\t"+""+"\t"+"area"+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
 //            bwLogAll.write(barcode+"\t"+polis+"\t"+nama+"\t"+"jenisGrupKartu"+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ seqPStr +"\t"+ seqPStr +"\t"+ seqPStr +"\t"+jenisAmplop+"\t"+area+"\t"+totalHal+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
-            bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ 0 +"\t"+ 0 +"\t"+ 0 +"\t"+""+"\t"+"area"+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
+            bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ 0 +"\t"+ 0 +"\t"+ 0 +"\t"+0+"\t"+0+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
             if (!publicOneline.equals(tPublicOneLine)) {
                 bwFinal.write(publicOneline + "\r\n");
             }            
@@ -191,8 +192,11 @@ public class WriteLogPdf {
     }
     
     private void initialLogs(String directoryInput) throws FileNotFoundException{
+        
         String logPath = pd.configurePath(directoryInput) + "\\\\"+"Log All.txt";
         String finalLogPath = pd.configurePath(directoryInput) + "\\\\"+"t_final.log";
+        
+        DeleteFileIfExsit(logPath);
         
         FileOutputStream outputStream1 = new FileOutputStream(logPath,true);
         bwLogAll = new BufferedWriter(new OutputStreamWriter(new DataOutputStream(outputStream1)));
@@ -232,6 +236,13 @@ public class WriteLogPdf {
         
         //bwFinal.flush();
         //bwFinal.close();
+    }
+     
+    public void DeleteFileIfExsit(String fileExist){
+        File file = new File(fileExist);
+        if(file.exists()){
+            file.delete();
+        }
     }
     
 }

@@ -6,16 +6,19 @@
 package maybank_rk_pdf.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import maybank_rk_pdf.model.LogModel;
 
 /**
  *
  * @author Ratino
  */
 public class PdfProcessing {
-    public void runProcesing(Directory dirPdf,String DirectoryInput, String parentInput, String type, Statement stmt) throws IOException{
+    public void runProcesing(Directory dirPdf,String DirectoryInput, String parentInput, String type, Statement stmt) throws IOException, SQLException{
         getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", type, stmt);
+        uploadLogToDb(DirectoryInput + "Log All.txt", stmt);
                 
     }
     
@@ -36,12 +39,14 @@ public class PdfProcessing {
             String namaFile = "" + DirectoryInput + "\\\\"+dirPdf.getFileName().get(i);
             logComponent = logPdf.textParserOnePdf(namaFile, pdf, DirectoryInput, prodByCb, "ddmmyyyy");
         }
-        System.exit(0);
+//        System.exit(0);
         return null;
     }
     
-    public void uploadLogToDb(String pathLog, Statement stmt){
-        
+    public void uploadLogToDb(String pathLog, Statement stmt) throws SQLException{
+        LogModel logModel = new LogModel();
+        logModel.createTable(stmt);
+        logModel.loadLogData(pathLog, stmt);        
     }
     
     

@@ -31,6 +31,19 @@ public class LogController {
         setConnection();
         log.createdbKanwil(path, stmt);
     }
+    
+    public void uploadDateCourier(String path, Statement stmt) throws SQLException{
+        log.loadCouByCourierNCS(path, stmt);
+        log.loadCouByCourierPOS(path, stmt);
+        log.loadDataHold(path, stmt);
+    }
+    
+    public void uploadDataResourceKurir(String path, Statement stmt) throws SQLException{
+        log.loadCouByCourierNCS(path + "NCS.txt", stmt);
+        log.loadDataZipCode(path + "ZIPCODE.txt", stmt);
+        log.loadDataHold(path + "HOLD.txt", stmt);
+    }
+       
 
     public Connection getKoneksi1() {
         return koneksi1;

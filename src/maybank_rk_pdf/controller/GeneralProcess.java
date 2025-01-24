@@ -37,7 +37,7 @@ public class GeneralProcess {
     
     public GeneralProcess(String[] params){
         inputDir = params[0];
-        getConnection();
+        initializeDatabaseConnection();
     }
     
      public void doInProcess() throws SQLException{
@@ -47,6 +47,7 @@ public class GeneralProcess {
             setResource();
             LogController log = new LogController();
             log.uploadDataKanwil( pd.configurePath(directoryResource + "KANWIL.txt"));
+            log.uploadDataResourceKurir(pd.configurePath(directoryResource), stmt);
             Directory dirPdf = new Directory();
             PdfProcessing processing = new PdfProcessing();
             dirPdf.scanPdfFile(inputDir);
@@ -80,8 +81,8 @@ public class GeneralProcess {
     public void setResource(){
         directoryResource = currentDirectory + "////" + "RESOURCES" + "////";
     }
-    
-    public void getConnection(){
+
+    public void initializeDatabaseConnection(){
         try {
             Connection connection = new Connection();
             connection.setConnection();

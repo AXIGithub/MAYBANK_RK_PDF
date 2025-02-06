@@ -24,6 +24,7 @@ public class PdfProcessing {
     
     public ArrayList<String> getLogOnePdf(Directory dirPdf, String DirectoryInput, String parentInput, String prodByCb, String typeProduct, Statement stmt) throws IOException{
         WriteLogPdf logPdf = new WriteLogPdf();
+        logPdf.DeleteFileIfExsit(parentInput + "Log All.txt");
         ArrayList<String> logComponent = new ArrayList<String>(10);
         logComponent.add(""); //Jml Page
         logComponent.add(""); // Nama
@@ -46,7 +47,8 @@ public class PdfProcessing {
     public void uploadLogToDb(String pathLog, Statement stmt) throws SQLException{
         LogModel logModel = new LogModel();
         logModel.createTable(stmt);
-        logModel.loadLogData(pathLog, stmt);        
+        logModel.loadLogData(pathLog, stmt);
+        logModel.setKodeKanwil(stmt);
     }
     
     

@@ -84,7 +84,12 @@ public class LogModel {
     
     public void setKodeKanwil(Statement stmt) throws SQLException{
         // Kode Kanwil di set pada kolom s1
+        System.out.println("Set Kode Kanwil");
         stmt.executeUpdate("UPDATE t_log JOIN t_kanwil ON t_log.name2 = t_kanwil.kode_cabang SET t_log.s1 = t_kanwil.kanwil");
+    }
+    
+    public void setKurir(Statement stmt){
+        
     }
     
     

@@ -194,9 +194,7 @@ public class WriteLogPdf {
     private void initialLogs(String directoryInput) throws FileNotFoundException{
         
         String logPath = pd.configurePath(directoryInput) + "\\\\"+"Log All.txt";
-        String finalLogPath = pd.configurePath(directoryInput) + "\\\\"+"t_final.log";
-        
-        DeleteFileIfExsit(logPath);
+        String finalLogPath = pd.configurePath(directoryInput) + "\\\\"+"t_final.log";       
         
         FileOutputStream outputStream1 = new FileOutputStream(logPath,true);
         bwLogAll = new BufferedWriter(new OutputStreamWriter(new DataOutputStream(outputStream1)));

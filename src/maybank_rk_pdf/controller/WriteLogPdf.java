@@ -38,7 +38,7 @@ public class WriteLogPdf {
     private BufferedWriter bwLogAll, bwFinal;
     String ListKartu="",Fpage="",Barcode="",FkodePos="",Fkurir="",Kurir="",GrupKurir="",
            Area="",Tgl_surat="",Name="",Addr1="",Addr2="",Addr3="",Addr4="",Addr5="",Addr6="",
-           ZipCode="",Provinsi="",Kota="",Policy="",Cycle="",NoKartu="",JnsKartu="",JnsGKartu="",
+           ZipCode="",Provinsi="",Kota="",Policy="",Cycle="",NoCIF="",JnsKartu="",JnsGKartu="",
            JnsAmp="",AchBank="",Brosur="",B1="",B2="",B3="",B4="",B5="",B6="",BlockCode="",JumTrans="",
            Tottagihan="",Rkk="",Qcredit="",Fsample="",jumPage="",jumamp="",Jumampall="",SeqPage="",
            SeqCus="",Fseqenv="",SeqEnv="",PathInt="",SeqBox="",Box="",JnsAmplop2="",JumPage2="", kdCabang="";
@@ -107,7 +107,7 @@ public class WriteLogPdf {
                         strLine = stringTokenizer.nextToken();
                         if (!strLine.trim().equals("")&& !strLine.trim().contains("NA")){
                             j++;
-                            System.out.println("j "+j);
+//                            System.out.println("j "+j);
                             
                             if(strLine.contains("CIF") ){                                
                                 logComponent.set(11,extractValueAfterColun(strLine)); // CIF
@@ -127,7 +127,9 @@ public class WriteLogPdf {
                                      
                             if (j==1 && logComponent.get(j).isEmpty()) logComponent.set(j, strLine); //1 = nama
                              else
-                                if(logComponent.get(j).isEmpty())
+                                if(logComponent.get(j).isEmpty() & !strLine.contains("CIF") & 
+                                   !strLine.contains("No. Rekening"))
+                                    
                                     logComponent.set(j, strLine); //2dst = addresS                 
 
                             if( (strLine.toUpperCase().indexOf("PERIODE LAPORAN")>-1) ) break;
@@ -157,14 +159,14 @@ public class WriteLogPdf {
 //            logComponent.set(10, jenisAmplop);
             
             String kurir = "SAP"; // Default //getKurir(polis,logComponent.get(6));
-                       
+            NoCIF = logComponent.get(11);           
 //           
             //+txt.norm6Digit(i)
             //out.write("MYB"+product+tanggal.substring(4, 6).trim()+polis.trim()+"\t"+polis+"\t"+nama+"\t"+"-"+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+"POS"+"\t"+ ""+seqP +"\t"+ ""+seqC +"\t"+ ""+seqE +"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
 //            out.write(barcode+"\t"+polis+"\t"+nama+"\t"+jenisGrupKartu+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+seqPStr +"\t"+ ""+seqCStr +"\t"+ ""+seqEStr +"\t"+jenisAmplop+"\t"+area+"\t"+totalHal+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
-            out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+"seqPStr" +"\t"+ ""+"seqCStr" +"\t"+ ""+"seqEStr" +"\t"+""+"\t"+"area"+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
+            out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+"seqPStr" +"\t"+ ""+"seqCStr" +"\t"+ ""+"seqEStr" +"\t"+""+"\t"+"area"+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
 //            bwLogAll.write(barcode+"\t"+polis+"\t"+nama+"\t"+"jenisGrupKartu"+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ seqPStr +"\t"+ seqPStr +"\t"+ seqPStr +"\t"+jenisAmplop+"\t"+area+"\t"+totalHal+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
-            bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ 0 +"\t"+ 0 +"\t"+ 0 +"\t"+0+"\t"+0+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
+            bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ seqP +"\t"+ 0 +"\t"+ 0 +"\t"+totalHal+"\t"+0+"\t"+0+"\t"+"0"+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
             if (!publicOneline.equals(tPublicOneLine)) {
                 bwFinal.write(publicOneline + "\r\n");
             }            

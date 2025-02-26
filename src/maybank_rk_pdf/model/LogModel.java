@@ -84,18 +84,36 @@ public class LogModel {
                    "ss1, ss2, ss3, ss4, ss5, ss6)");
     }
     
-    public void setKodeKanwil(Statement stmt) throws SQLException{
-        // Kode Kanwil di set pada kolom s1
-        System.out.println("Set Kode Kanwil");
+    public void setKodeKanwil(Statement stmt){
+        try {
+            // Kode Kanwil di set pada kolom s1
+            System.out.println("Set Kode Kanwil");
 //        stmt.executeUpdate("UPDATE t_log JOIN t_kanwil ON t_log.name2 = t_kanwil.kode_cabang SET t_log.s1 = t_kanwil.kanwil");
-        stmt.executeUpdate("UPDATE t_log SET s1 = (SELECT kanwil FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2) WHERE EXIST (SELECT 1 FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2)");
-        System.out.println("Done");
+            stmt.executeUpdate("UPDATE t_log SET s1 = (SELECT kanwil FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2) WHERE EXISTS (SELECT 1 FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2)");
+            System.out.println("Done");
+        } catch (SQLException ex) {
+            System.out.println("Set Kode Kanwil Error!!");
+            Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void setKurirNCSByNoRek(Statement stmt) throws SQLException{
         stmt.executeUpdate("UPDATE t_log JOIN t_ncs ON t_log.id_customer = t_ncs.no_rekening SET t_log.courier_name = 'NCS'");
     }
     
-    
+    public void setKurirByKanwil(Statement stmt){
+        try {
+            //        stmt.executeUpdate("UPDATE t_log SET courier_name = 'POS' WHERE s1 IN (3,6)");
+//        stmt.executeUpdate("UPDATE t_log SET courier_name = 'NCS' WHERE s1 NOT IN (3,6)");
+        // Cara 2
+        String quiery = "UPDATE t_log SET courier_name = CASE " +
+                "WHEN s1 IN (3,6) THEN 'POS'"+
+                "ELSE 'NCS' END";
+        int totalRow = stmt.executeUpdate(quiery);
+        System.out.println("Update rows : " + totalRow);
+        } catch (SQLException ex) {
+            Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, "Error update courier", ex);
+        }
+    }
     
 }

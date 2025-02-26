@@ -49,6 +49,7 @@ public class PdfProcessing {
         logModel.createTable(stmt);
         logModel.loadLogData(pathLog, stmt);
         logModel.setKodeKanwil(stmt);
+        logModel.setKurirByKanwil(stmt);
     }
     
     

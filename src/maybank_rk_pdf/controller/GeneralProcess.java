@@ -37,6 +37,7 @@ public class GeneralProcess {
     
     public GeneralProcess(String[] params){
         inputDir = params[0];
+        cycle = params[1];
         initializeDatabaseConnection();
     }
     
@@ -48,10 +49,13 @@ public class GeneralProcess {
             LogController log = new LogController();
             log.uploadDataKanwil( pd.configurePath(directoryResource + "KANWIL.txt"));
             log.uploadDataResourceKurir(pd.configurePath(directoryResource), stmt);
+            createDirectory(currentDirectory, inputDir, cycle);
             Directory dirPdf = new Directory();
             PdfProcessing processing = new PdfProcessing();
             dirPdf.scanPdfFile(inputDir);
-            processing.runProcesing(dirPdf, inputDir, inputDir, cycle, stmt);
+            String[] params = {readyToPrintCycleLog, readyToPrintCycleLogKurir, readyToPrintCycleLogMaster,
+                                readyToPrintCycleOutput, readyToPrintCycleReport, readyToPrintCycleLogScan};
+            processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,8 +67,8 @@ public class GeneralProcess {
         this.currentDirectory = path;
         PathDirectory pd = new PathDirectory();
         
-        readyToPrintCycle = pd.configurePath(this.currentDirectory + "\\READY TO PRINT\\" + "BILLING STATEMENT " + cycle);
-        readyToPrintCycleLog = pd.configurePath(readyToPrintCycle + "\\LOG BILLING " + cycle);
+        readyToPrintCycle = pd.configurePath(this.currentDirectory + "\\READY TO PRINT\\" + "BILLING RK " + cycle);
+        readyToPrintCycleLog = pd.configurePath(readyToPrintCycle + "\\LOG RK " + cycle);
         readyToPrintCycleLogKurir = pd.configurePath(readyToPrintCycleLog  + "\\LOG KURIR\\");
         readyToPrintCycleLogMaster = pd.configurePath(readyToPrintCycleLog + "\\LOG MAYBANK");
         readyToPrintCycleOutput = pd.configurePath(readyToPrintCycle + "\\OUTPUT\\");

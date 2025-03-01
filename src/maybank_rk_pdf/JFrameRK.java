@@ -316,7 +316,8 @@ public class JFrameRK extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        try {
-           String[] params = {inputDir};
+           cycle = jTextDate.getText().replace("-", "");
+           String[] params = {inputDir, cycle};
            GeneralProcess process = new GeneralProcess(params);
            process.doInProcess();
        } catch (SQLException ex) {

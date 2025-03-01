@@ -7,6 +7,7 @@ package maybank_rk_pdf.model;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +16,37 @@ import java.util.logging.Logger;
  * @author Ratino
  */
 public class LogModel {
+    
+    private ArrayList<Integer> idLog            = new ArrayList<Integer>(10);
+    private ArrayList<String>barcode            = new ArrayList<String>(10);
+    private ArrayList<String>idCustomer         = new ArrayList<String>(10);
+    private ArrayList<String>name1              = new ArrayList<String>(10);
+    private ArrayList<String>name2              = new ArrayList<String>(10);
+    private ArrayList<String>name3              = new ArrayList<String>(10);
+    private ArrayList<String>address1           = new ArrayList<String>(10);
+    private ArrayList<String>address2           = new ArrayList<String>(10);
+    private ArrayList<String>address3           = new ArrayList<String>(10);
+    private ArrayList<String>address4           = new ArrayList<String>(10);
+    private ArrayList<String>address5           = new ArrayList<String>(10);
+    private ArrayList<String>address6           = new ArrayList<String>(10);
+    private ArrayList<Integer>b1                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>b2                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>b3                = new ArrayList<Integer>(10);
+//    private ArrayList<Integer>b4                = new ArrayList<Integer>(10);
+    private ArrayList<String>b4                = new ArrayList<String>(10);
+    private ArrayList<Integer>b5                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>b6                = new ArrayList<Integer>(10);
+    private ArrayList<String>s1                = new ArrayList<String>(10);
+    private ArrayList<String>s2                = new ArrayList<String>(10);
+    private ArrayList<String>s3                = new ArrayList<String>(10);
+    private ArrayList<String>s4                = new ArrayList<String>(10);
+    private ArrayList<String>s5                = new ArrayList<String>(10);
+    private ArrayList<String>s6                = new ArrayList<String>(10);
+    private ArrayList<String>productName        = new ArrayList<String>(10);
+    private ArrayList<String>courierName        = new ArrayList<String>(10);
+    private ArrayList<Integer>seqPage            = new ArrayList<Integer>(10);
+    private ArrayList<Integer>seqCustomer        = new ArrayList<Integer>(10);
+    private ArrayList<Integer>seqEnvelope        = new ArrayList<Integer>(10);
     
     public void createdbKanwil(String pathDataKanwil, Statement stmt) throws SQLException{
         stmt.executeUpdate("DROP TABLE IF EXISTS t_kanwil");
@@ -124,5 +156,240 @@ public class LogModel {
             Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, "Error update courier", ex);
         }
     }
+
+    public ArrayList<Integer> getIdLog() {
+        return idLog;
+    }
+
+    public void setIdLog(ArrayList<Integer> idLog) {
+        this.idLog = idLog;
+    }
+
+    public ArrayList<String> getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(ArrayList<String> barcode) {
+        this.barcode = barcode;
+    }
+
+    public ArrayList<String> getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(ArrayList<String> idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
+    public ArrayList<String> getName1() {
+        return name1;
+    }
+
+    public void setName1(ArrayList<String> name1) {
+        this.name1 = name1;
+    }
+
+    public ArrayList<String> getName2() {
+        return name2;
+    }
+
+    public void setName2(ArrayList<String> name2) {
+        this.name2 = name2;
+    }
+
+    public ArrayList<String> getName3() {
+        return name3;
+    }
+
+    public void setName3(ArrayList<String> name3) {
+        this.name3 = name3;
+    }
+
+    public ArrayList<String> getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(ArrayList<String> address1) {
+        this.address1 = address1;
+    }
+
+    public ArrayList<String> getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(ArrayList<String> address2) {
+        this.address2 = address2;
+    }
+
+    public ArrayList<String> getAddress3() {
+        return address3;
+    }
+
+    public void setAddress3(ArrayList<String> address3) {
+        this.address3 = address3;
+    }
+
+    public ArrayList<String> getAddress4() {
+        return address4;
+    }
+
+    public void setAddress4(ArrayList<String> address4) {
+        this.address4 = address4;
+    }
+
+    public ArrayList<String> getAddress5() {
+        return address5;
+    }
+
+    public void setAddress5(ArrayList<String> address5) {
+        this.address5 = address5;
+    }
+
+    public ArrayList<String> getAddress6() {
+        return address6;
+    }
+
+    public void setAddress6(ArrayList<String> address6) {
+        this.address6 = address6;
+    }
+
+    public ArrayList<Integer> getB1() {
+        return b1;
+    }
+
+    public void setB1(ArrayList<Integer> b1) {
+        this.b1 = b1;
+    }
+
+    public ArrayList<Integer> getB2() {
+        return b2;
+    }
+
+    public void setB2(ArrayList<Integer> b2) {
+        this.b2 = b2;
+    }
+
+    public ArrayList<Integer> getB3() {
+        return b3;
+    }
+
+    public void setB3(ArrayList<Integer> b3) {
+        this.b3 = b3;
+    }
+
+    public ArrayList<String> getB4() {
+        return b4;
+    }
+
+    public void setB4(ArrayList<String> b4) {
+        this.b4 = b4;
+    }
+
+    public ArrayList<Integer> getB5() {
+        return b5;
+    }
+
+    public void setB5(ArrayList<Integer> b5) {
+        this.b5 = b5;
+    }
+
+    public ArrayList<Integer> getB6() {
+        return b6;
+    }
+
+    public void setB6(ArrayList<Integer> b6) {
+        this.b6 = b6;
+    }
+
+    public ArrayList<String> getS1() {
+        return s1;
+    }
+
+    public void setS1(ArrayList<String> s1) {
+        this.s1 = s1;
+    }
+
+    public ArrayList<String> getS2() {
+        return s2;
+    }
+
+    public void setS2(ArrayList<String> s2) {
+        this.s2 = s2;
+    }
+
+    public ArrayList<String> getS3() {
+        return s3;
+    }
+
+    public void setS3(ArrayList<String> s3) {
+        this.s3 = s3;
+    }
+
+    public ArrayList<String> getS4() {
+        return s4;
+    }
+
+    public void setS4(ArrayList<String> s4) {
+        this.s4 = s4;
+    }
+
+    public ArrayList<String> getS5() {
+        return s5;
+    }
+
+    public void setS5(ArrayList<String> s5) {
+        this.s5 = s5;
+    }
+
+    public ArrayList<String> getS6() {
+        return s6;
+    }
+
+    public void setS6(ArrayList<String> s6) {
+        this.s6 = s6;
+    }
+
+    public ArrayList<String> getProductName() {
+        return productName;
+    }
+
+    public void setProductName(ArrayList<String> productName) {
+        this.productName = productName;
+    }
+
+    public ArrayList<String> getCourierName() {
+        return courierName;
+    }
+
+    public void setCourierName(ArrayList<String> courierName) {
+        this.courierName = courierName;
+    }
+
+    public ArrayList<Integer> getSeqPage() {
+        return seqPage;
+    }
+
+    public void setSeqPage(ArrayList<Integer> seqPage) {
+        this.seqPage = seqPage;
+    }
+
+    public ArrayList<Integer> getSeqCustomer() {
+        return seqCustomer;
+    }
+
+    public void setSeqCustomer(ArrayList<Integer> seqCustomer) {
+        this.seqCustomer = seqCustomer;
+    }
+
+    public ArrayList<Integer> getSeqEnvelope() {
+        return seqEnvelope;
+    }
+
+    public void setSeqEnvelope(ArrayList<Integer> seqEnvelope) {
+        this.seqEnvelope = seqEnvelope;
+    }
+    
+    
+    
     
 }

@@ -51,11 +51,12 @@ public class WriteLogPdf {
         TextModification txt = new TextModification();
         getDao dao = new getDao();
         typeDoc = ""; tPublicOneLine = "Ratino";
-        String addr1="",addr2="",addr3="",addr4="",addr5="";
+        String addr1="",addr2="",addr3="",addr4="",addr5="", addr6="";
         String tBarcode = "";
         
         kdCabang = getBranchCode(fileName);
         noRekening = getNoRekening(fileName);
+        typeDoc = getTypeProduct(noRekening);
         
         Path path = Paths.get(inputFile);
         Path parentPath = path.getParent();
@@ -77,9 +78,9 @@ public class WriteLogPdf {
 
         productType = ""+reader.getNumberOfPages();
         
-        typeDoc = product;
         totalHal = ""+reader.getNumberOfPages();
         System.out.println("PDF File : "  + inputFile);
+        addr6 = fileName;
         for (int i = 1; i <= reader.getNumberOfPages(); i++) {
             seqP++;
             strategy = parser.processContent(i, new SimpleTextExtractionStrategy());            
@@ -153,11 +154,7 @@ public class WriteLogPdf {
             if (logComponent.get(4).isEmpty() == false) addr3 = ""+logComponent.get(4);
             if (logComponent.get(5).isEmpty() == false) addr4 = ""+logComponent.get(5);
             if (logComponent.get(6).isEmpty() == false) addr5 = ""+logComponent.get(6); //
-            
-//            dao.getBin(noCard);            
-//            String jenisAmplop = dao.getJenisAmplop(); 
-//            String jenisGrupKartu = dao.getJenisGrupKartu();
-//            logComponent.set(10, jenisAmplop);
+
             
             String kurir = "SAP"; // Default //getKurir(polis,logComponent.get(6));
             NoCIF = logComponent.get(11);           
@@ -166,13 +163,18 @@ public class WriteLogPdf {
             //+txt.norm6Digit(i)
             //out.write("MYB"+product+tanggal.substring(4, 6).trim()+polis.trim()+"\t"+polis+"\t"+nama+"\t"+"-"+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+"POS"+"\t"+ ""+seqP +"\t"+ ""+seqC +"\t"+ ""+seqE +"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
 //            out.write(barcode+"\t"+polis+"\t"+nama+"\t"+jenisGrupKartu+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+seqPStr +"\t"+ ""+seqCStr +"\t"+ ""+seqEStr +"\t"+jenisAmplop+"\t"+area+"\t"+totalHal+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
-            out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ ""+"seqPStr" +"\t"+ ""+"seqCStr" +"\t"+ ""+"seqEStr" +"\t"+""+"\t"+"area"+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
+            out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+typeDoc
+                    +"\t"+kurir+"\t"+ ""+"seqPStr" +"\t"+ ""+"seqCStr" +"\t"+ ""+"seqEStr" +"\t"+""+"\t"+"area"+"\t"+totalHal+"\t"+seqP+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
 //            bwLogAll.write(barcode+"\t"+polis+"\t"+nama+"\t"+"jenisGrupKartu"+"\t"+"-"+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ seqPStr +"\t"+ seqPStr +"\t"+ seqPStr +"\t"+jenisAmplop+"\t"+area+"\t"+totalHal+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
-            bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+"-"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+product+"\t"+kurir+"\t"+ seqP +"\t"+ 0 +"\t"+ 0 +"\t"+totalHal+"\t"+jnsAmp+"\t"+0+"\t"+"0"+"\t"+"1"+"\t"+"0"+"\t"+"0"+"\r\n");
-            if (!publicOneline.equals(tPublicOneLine)) {
-                bwFinal.write(publicOneline + "\r\n");
-            }            
-            tPublicOneLine = publicOneline;
+            if(i==1){
+                //             barcode    id_customer      name1      name2       name3      address1  address2   address3   address4  address5   address6      b1       b2       b3      b4       b5       b6       s1       s2       s3        s4      s5       s6    product_name courier_name seq_page seq_customer seq_envelope ss1       ss2        ss3     ss4     ss5      ss6
+                bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+addr6+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"1"+"\t"+typeDoc+"\t"+kurir+"\t"+ seqP +"\t"+ 0 +"\t"+ 0 +"\t"+totalHal+"\t"+jnsAmp+"\t"+0+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
+                out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+addr6+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"1"+"\t"+typeDoc+"\t"+kurir+"\t"+ seqP +"\t"+ 0 +"\t"+ 0 +"\t"+totalHal+"\t"+jnsAmp+"\t"+0+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
+            } else {
+                bwLogAll.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+addr6+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+typeDoc+"\t"+kurir+"\t"+ seqP +"\t"+ 0 +"\t"+ 0 +"\t"+totalHal+"\t"+jnsAmp+"\t"+0+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
+                out.write(barcode+"\t"+noRekening+"\t"+nama+"\t"+kdCabang+"\t"+NoCIF+"\t"+addr1+"\t"+addr2+"\t"+addr3+"\t"+addr4+"\t"+addr5+"\t"+addr6+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+typeDoc+"\t"+kurir+"\t"+ seqP +"\t"+ 0 +"\t"+ 0 +"\t"+totalHal+"\t"+jnsAmp+"\t"+0+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\t"+"0"+"\r\n");
+            }
+           
         }
                 
         
@@ -221,6 +223,15 @@ public class WriteLogPdf {
     public String getNoRekening(String fileName){
         String[] split = fileName.split("_");
         return split[2];
+    }
+    
+    public String getTypeProduct(String noRek){
+        String firstChar = noRek.substring(0, 1);
+        if(firstChar.contains("7")){
+            return "SYARIAH";
+        } else {
+            return "KONVEN";
+        }
     }
     
     

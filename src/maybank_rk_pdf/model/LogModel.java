@@ -5,6 +5,7 @@
  */
 package maybank_rk_pdf.model;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -36,17 +37,23 @@ public class LogModel {
     private ArrayList<String>b4                = new ArrayList<String>(10);
     private ArrayList<Integer>b5                = new ArrayList<Integer>(10);
     private ArrayList<Integer>b6                = new ArrayList<Integer>(10);
-    private ArrayList<String>s1                = new ArrayList<String>(10);
-    private ArrayList<String>s2                = new ArrayList<String>(10);
-    private ArrayList<String>s3                = new ArrayList<String>(10);
-    private ArrayList<String>s4                = new ArrayList<String>(10);
-    private ArrayList<String>s5                = new ArrayList<String>(10);
-    private ArrayList<String>s6                = new ArrayList<String>(10);
+    private ArrayList<Integer>s1                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>s2                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>s3                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>s4                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>s5                = new ArrayList<Integer>(10);
+    private ArrayList<Integer>s6                = new ArrayList<Integer>(10);
     private ArrayList<String>productName        = new ArrayList<String>(10);
     private ArrayList<String>courierName        = new ArrayList<String>(10);
     private ArrayList<Integer>seqPage            = new ArrayList<Integer>(10);
     private ArrayList<Integer>seqCustomer        = new ArrayList<Integer>(10);
     private ArrayList<Integer>seqEnvelope        = new ArrayList<Integer>(10);
+    private ArrayList<String>ss1                = new ArrayList<String>(10);
+    private ArrayList<String>ss2                = new ArrayList<String>(10);
+    private ArrayList<String>ss3                = new ArrayList<String>(10);
+    private ArrayList<String>ss4                = new ArrayList<String>(10);
+    private ArrayList<String>ss5                = new ArrayList<String>(10);
+    private ArrayList<String>ss6                = new ArrayList<String>(10);
     
     public void createdbKanwil(String pathDataKanwil, Statement stmt) throws SQLException{
         stmt.executeUpdate("DROP TABLE IF EXISTS t_kanwil");
@@ -75,9 +82,28 @@ public class LogModel {
         }
     }
     
-    public void selectTlog(Statement stmt){
+    public void selectTableForCustomer(Statement stmt){
         try {
-            stmt.executeQuery("SELECT * FROM t_log ORDER BY ss2, courier_name, ss1, id_customer DESC");
+            ResultSet hasilQuery = null;
+            hasilQuery = stmt.executeQuery("SELECT * FROM t_log WHERE s6 = '1' ORDER BY ss2, courier_name, ss1, id_customer DESC");
+            while(hasilQuery.next()){
+                idCustomer.add(hasilQuery.getString("id_customer"));
+                name1.add(hasilQuery.getString("name1")); // Nama Customer
+                name2.add(hasilQuery.getString("name2")); // Kode Cabang
+                name3.add(hasilQuery.getString("name3")); //CIF
+                address1.add(hasilQuery.getString("address1"));
+                address2.add(hasilQuery.getString("address2"));
+                address3.add(hasilQuery.getString("address3"));
+                address4.add(hasilQuery.getString("address4"));
+                address5.add(hasilQuery.getString("address5"));
+                address6.add(hasilQuery.getString("address6")); // Name File
+                s1.add(hasilQuery.getInt("s1")); // Kanwil
+                
+                productName.add(hasilQuery.getString("product_name"));
+                courierName.add(hasilQuery.getString("courier_name"));
+                ss1.add(hasilQuery.getString("ss1")); // Total Halaman
+                ss2.add(hasilQuery.getString("ss1")); // Jenis Amplop
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -301,54 +327,55 @@ public class LogModel {
         this.b6 = b6;
     }
 
-    public ArrayList<String> getS1() {
+    public ArrayList<Integer> getS1() {
         return s1;
     }
 
-    public void setS1(ArrayList<String> s1) {
+    public void setS1(ArrayList<Integer> s1) {
         this.s1 = s1;
     }
 
-    public ArrayList<String> getS2() {
+    public ArrayList<Integer> getS2() {
         return s2;
     }
 
-    public void setS2(ArrayList<String> s2) {
+    public void setS2(ArrayList<Integer> s2) {
         this.s2 = s2;
     }
 
-    public ArrayList<String> getS3() {
+    public ArrayList<Integer> getS3() {
         return s3;
     }
 
-    public void setS3(ArrayList<String> s3) {
+    public void setS3(ArrayList<Integer> s3) {
         this.s3 = s3;
     }
 
-    public ArrayList<String> getS4() {
+    public ArrayList<Integer> getS4() {
         return s4;
     }
 
-    public void setS4(ArrayList<String> s4) {
+    public void setS4(ArrayList<Integer> s4) {
         this.s4 = s4;
     }
 
-    public ArrayList<String> getS5() {
+    public ArrayList<Integer> getS5() {
         return s5;
     }
 
-    public void setS5(ArrayList<String> s5) {
+    public void setS5(ArrayList<Integer> s5) {
         this.s5 = s5;
     }
 
-    public ArrayList<String> getS6() {
+    public ArrayList<Integer> getS6() {
         return s6;
     }
 
-    public void setS6(ArrayList<String> s6) {
+    public void setS6(ArrayList<Integer> s6) {
         this.s6 = s6;
     }
 
+    
     public ArrayList<String> getProductName() {
         return productName;
     }

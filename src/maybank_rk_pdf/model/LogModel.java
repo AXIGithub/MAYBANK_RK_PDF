@@ -97,12 +97,27 @@ public class LogModel {
                 address4.add(hasilQuery.getString("address4"));
                 address5.add(hasilQuery.getString("address5"));
                 address6.add(hasilQuery.getString("address6")); // Name File
+                b1.add(hasilQuery.getInt("b1"));
+                b2.add(hasilQuery.getInt("b2"));
+                b3.add(hasilQuery.getInt("b3"));
+                b4.add(hasilQuery.getString("b4"));
+                b5.add(hasilQuery.getInt("b5"));
+                b6.add(hasilQuery.getInt("b6"));
                 s1.add(hasilQuery.getInt("s1")); // Kanwil
+                s2.add(hasilQuery.getInt("s2"));
+                s3.add(hasilQuery.getInt("s3"));
+                s4.add(hasilQuery.getInt("s4"));
+                s5.add(hasilQuery.getInt("s5"));
+                s6.add(hasilQuery.getInt("s6"));
                 
                 productName.add(hasilQuery.getString("product_name"));
                 courierName.add(hasilQuery.getString("courier_name"));
                 ss1.add(hasilQuery.getString("ss1")); // Total Halaman
                 ss2.add(hasilQuery.getString("ss2")); // Jenis Amplop
+                ss3.add(hasilQuery.getString("ss3"));
+                ss4.add(hasilQuery.getString("ss4"));
+                ss5.add(hasilQuery.getString("ss5"));
+                ss6.add(hasilQuery.getString("ss6"));
             }
             
         } catch (SQLException ex) {
@@ -423,6 +438,23 @@ public class LogModel {
     public ArrayList<String> getSs2() {
         return ss2;
     }
+
+    public ArrayList<String> getSs3() {
+        return ss3;
+    }
+
+    public ArrayList<String> getSs4() {
+        return ss4;
+    }
+
+    public ArrayList<String> getSs5() {
+        return ss5;
+    }
+
+    public ArrayList<String> getSs6() {
+        return ss6;
+    }
+    
     
     
     

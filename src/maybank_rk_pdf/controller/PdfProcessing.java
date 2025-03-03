@@ -17,11 +17,14 @@ import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,6 +43,7 @@ import maybank_rk_pdf.model.LogModel;
 public class PdfProcessing {
     
     private String dirOutput, dirLogKurir, dirLogMaster, dirLogProd, dirReport, dirLogScan;
+    private int seqP, seqA, SeqC;
     public void runProcesing(String[] params, Directory dirPdf,String DirectoryInput, String parentInput, String type, Statement stmt) throws IOException, SQLException{
         dirLogProd = params[0];
         dirLogKurir = params[1];
@@ -76,110 +80,101 @@ public class PdfProcessing {
         return null;
     }
     
-    public void barcodeInjector(String inputDir, Statement stmt){
-    Document document = new Document(PageSize.A4);
-    PdfWriter writerNew = null;
-
-    try {
-        TextModification txt = new TextModification();
-        LocalDateTime dt = LocalDateTime.now();
-        String dateTime = dt.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-
-//        String dirOutput = dirOutput; // Ubah dengan direktori tujuan
-        LogModel logModel = new LogModel();
-        logModel.selectTableForCustomer(stmt);
-        System.out.println("Total Customer : " + logModel.getIdCustomer().size());
-
-        File outputFile = new File(Paths.get(dirOutput, dateTime + "-000001-" + logModel.getCourierName().get(0) + "-Print.pdf").toString());
-        writerNew = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
-        document.open();
-
-        PdfContentByte canvas = writerNew.getDirectContent();
-
-        for (int i = 0; i < logModel.getIdCustomer().size(); i++) {
-            String pdfFileName = logModel.getAddress6().get(i);
-            System.out.println("Combine ke " + i + ". " + pdfFileName);
-            PdfReader reader = new PdfReader(inputDir + pdfFileName);
-
-            int numberOfPages = reader.getNumberOfPages();
-            for (int j = 1; j <= numberOfPages; j++) {
-                PdfImportedPage page = writerNew.getImportedPage(reader, j);
-                canvas.addTemplate(page, 0, 0);
-                document.newPage();
-            }
-
-            reader.close();
-        }
-
-        System.out.println("Berhasil dicombine");
-        } catch (DocumentException | IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (document.isOpen()) {
-                document.close();
-            }
-        }
-    }
-    
-    
+        
     public void barcodeInjector2(String inputDir, Statement stmt) {
-    Document document = new Document();
-    PdfCopy copy = null;
-    Boolean isFirstPage = false;
-    String kurir = "", jnsAmplop = "";
-    try {
-        TextModification txt = new TextModification();
-        LocalDateTime dt = LocalDateTime.now();
-        String dateTime = dt.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+        Document document = new Document();
+        PdfCopy copy = null;
+        Boolean isFirstPage = false;
+        String kurir = "", jnsAmplop = "", logString="", barcode="";
+        seqP=0; seqA=0; SeqC=0;
+        try {
+            TextModification txt = new TextModification();
+            LocalDateTime dt = LocalDateTime.now();
+            String dateTime = dt.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
 
-       
-        File outputFile = new File(Paths.get(dirOutput, dateTime + "-000001-Print.pdf").toString());
-        if (!outputFile.getParentFile().exists()) {
-            outputFile.getParentFile().mkdirs();
-        }
+            //Create file 
+            FileOutputStream outputStream = new FileOutputStream(dirLogProd + "LOG PRODUKSI.LOG");
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(dataOutputStream));
 
-        // Membuka dokumen dan menggunakan PdfCopy
-        FileOutputStream fos = new FileOutputStream(outputFile);
-        copy = new PdfCopy(document, fos);
-        document.open();
 
-        LogModel logModel = new LogModel();
-        logModel.selectTableForCustomer(stmt);
-        System.out.println("Total Customer: " + logModel.getIdCustomer().size());
-
-        for (int i = 0; i < logModel.getIdCustomer().size(); i++) {
-            String pdfFileName = logModel.getAddress6().get(i);
-            System.out.println("Combine ke " + i + ": " + pdfFileName);
-            
-            String barcode = logModel.getIdCustomer().get(i);
-            kurir = logModel.getCourierName().get(i);
-            jnsAmplop = logModel.getSs2().get(i);
-
-            PdfReader reader = new PdfReader(inputDir + pdfFileName);
-            int numberOfPages = reader.getNumberOfPages();
-            
-            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
-            PdfStamper stamper = new PdfStamper(reader, arrayOutputStream);
-             
-            for(int j=1; j <= numberOfPages; j++){
-                barcode = barcode + txt.norm6Digit(j);
-                isFirstPage = j == 1 ? true : false;
-                PdfContentByte canvas = stamper.getOverContent(j);
-                addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(j) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
-            }
-            
-            stamper.close();
-            reader.close();
-            
-            PdfReader pdfReader2 = new PdfReader(arrayOutputStream.toByteArray());
-            for (int j = 1; j <= pdfReader2.getNumberOfPages(); j++) {
-                copy.addPage(copy.getImportedPage(pdfReader2, j));
+            File outputFile = new File(Paths.get(dirOutput, dateTime + "-000001-Print.pdf").toString());
+            if (!outputFile.getParentFile().exists()) {
+                outputFile.getParentFile().mkdirs();
             }
 
-            pdfReader2.close();
-        }
+            // Membuka dokumen dan menggunakan PdfCopy
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            copy = new PdfCopy(document, fos);
+            document.open();
 
-        System.out.println("Berhasil dicombine ke: " + outputFile.getAbsolutePath());
+            LogModel logModel = new LogModel();
+            logModel.selectTableForCustomer(stmt);
+            System.out.println("Total Customer: " + logModel.getIdCustomer().size());
+
+            for (int i = 0; i < logModel.getIdCustomer().size(); i++) {
+                String pdfFileName = logModel.getAddress6().get(i);
+                System.out.println("Combine ke " + i + ": " + pdfFileName);
+
+                String idCustomer = logModel.getIdCustomer().get(i);
+                kurir = logModel.getCourierName().get(i);
+                jnsAmplop = logModel.getSs2().get(i);
+                
+                seqA++;
+                SeqC++;
+
+                PdfReader reader = new PdfReader(inputDir + pdfFileName);
+                int numberOfPages = reader.getNumberOfPages();
+
+                ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+                PdfStamper stamper = new PdfStamper(reader, arrayOutputStream);
+
+                for(int j=1; j <= numberOfPages; j++){
+                    seqP++;
+                    barcode = idCustomer + txt.norm6Digit(j);
+                    isFirstPage = j == 1 ? true : false;
+                    PdfContentByte canvas = stamper.getOverContent(j);
+                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(j) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
+                    
+                    if(j==1){
+                        logString = barcode + "\t" + idCustomer + "\t" + logModel.getName1().get(i) + "\t" + logModel.getName2().get(i) + "\t" + logModel.getName3().get(i) + "\t" +
+                                logModel.getAddress1().get(i) + "\t" + logModel.getAddress2().get(i) + "\t" + logModel.getAddress3().get(i) + "\t" + logModel.getAddress4().get(i) + "\t" +
+                                logModel.getAddress5().get(i) + "\t" + "-" + "\t" + logModel.getB1().get(i) + "\t" + logModel.getB2().get(i) + "\t" + logModel.getB3().get(i) + "\t" +
+                                logModel.getB4().get(i) + "\t" + logModel.getB5().get(i) + "\t" + logModel.getB6().get(i) + "\t" + logModel.getS1().get(i) + "\t" + logModel.getS2().get(i) + "\t" +
+                                logModel.getS3().get(i) + "\t" +logModel.getS4().get(i) + "\t" + logModel.getS5().get(i) + "\t" + logModel.getS6().get(i) + "\t"  + logModel.getProductName().get(i) + "\t" +
+                                logModel.getCourierName().get(i) + "\t" + seqP + "\t" + SeqC + "\t" + seqA + "\t" + logModel.getSs1().get(i) + "\t" + logModel.getSs2().get(i) + "\t" +
+                                logModel.getSs3().get(i) + "\t" + logModel.getSs4().get(i) + "\t" + logModel.getSs5().get(i) + "\t" + logModel.getSs6().get(i) + "\r\n" ;
+                    } else {
+                        logString = barcode + "\t" + idCustomer + "\t" + logModel.getName1().get(i) + "\t" + logModel.getName2().get(i) + "\t" + logModel.getName3().get(i) + "\t" +
+                                logModel.getAddress1().get(i) + "\t" + logModel.getAddress2().get(i) + "\t" + logModel.getAddress3().get(i) + "\t" + logModel.getAddress4().get(i) + "\t" +
+                                logModel.getAddress5().get(i) + "\t" + "-" + "\t" + logModel.getB1().get(i) + "\t" + logModel.getB2().get(i) + "\t" + logModel.getB3().get(i) + "\t" +
+                                logModel.getB4().get(i) + "\t" + logModel.getB5().get(i) + "\t" + logModel.getB6().get(i) + "\t" + logModel.getS1().get(i) + "\t" + logModel.getS2().get(i) + "\t" +
+                                logModel.getS3().get(i) + "\t" +logModel.getS4().get(i) + "\t" + logModel.getS5().get(i) + "\t" + "0" + "\t"  + logModel.getProductName().get(i) + "\t" +
+                                logModel.getCourierName().get(i) + "\t" + seqP + "\t" + SeqC + "\t" + seqA + "\t" + logModel.getSs1().get(i) + "\t" + logModel.getSs2().get(i) + "\t" +
+                                logModel.getSs3().get(i) + "\t" + logModel.getSs4().get(i) + "\t" + logModel.getSs5().get(i) + "\t" + logModel.getSs6().get(i) + "\r\n" ;
+                    }
+                    
+                    bw.write(logString);
+                }
+                
+                
+
+                stamper.close();
+                reader.close();
+
+                //Combine
+                PdfReader pdfReader2 = new PdfReader(arrayOutputStream.toByteArray());
+                for (int j = 1; j <= pdfReader2.getNumberOfPages(); j++) {
+                    copy.addPage(copy.getImportedPage(pdfReader2, j));
+                }
+
+                pdfReader2.close();
+            }
+            
+            bw.flush();
+            bw.close();
+
+            System.out.println("Berhasil dicombine ke: " + outputFile.getAbsolutePath());
 
         } catch (DocumentException | IOException ex) {
             ex.printStackTrace();
@@ -213,9 +208,7 @@ public class PdfProcessing {
             
            
             
-        } catch (DocumentException ex) {
-            Logger.getLogger(PdfProcessing.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (DocumentException | IOException ex) {
             Logger.getLogger(PdfProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

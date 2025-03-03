@@ -102,7 +102,7 @@ public class LogModel {
                 productName.add(hasilQuery.getString("product_name"));
                 courierName.add(hasilQuery.getString("courier_name"));
                 ss1.add(hasilQuery.getString("ss1")); // Total Halaman
-                ss2.add(hasilQuery.getString("ss1")); // Jenis Amplop
+                ss2.add(hasilQuery.getString("ss2")); // Jenis Amplop
             }
             
         } catch (SQLException ex) {
@@ -414,6 +414,14 @@ public class LogModel {
 
     public void setSeqEnvelope(ArrayList<Integer> seqEnvelope) {
         this.seqEnvelope = seqEnvelope;
+    }
+
+    public ArrayList<String> getSs1() {
+        return ss1;
+    }
+
+    public ArrayList<String> getSs2() {
+        return ss2;
     }
     
     

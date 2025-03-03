@@ -7,12 +7,17 @@ package maybank_rk_pdf.controller;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -120,7 +125,8 @@ public class PdfProcessing {
     public void barcodeInjector2(String inputDir, Statement stmt) {
     Document document = new Document();
     PdfCopy copy = null;
-
+    Boolean isFirstPage = false;
+    String kurir = "", jnsAmplop = "";
     try {
         TextModification txt = new TextModification();
         LocalDateTime dt = LocalDateTime.now();
@@ -144,15 +150,33 @@ public class PdfProcessing {
         for (int i = 0; i < logModel.getIdCustomer().size(); i++) {
             String pdfFileName = logModel.getAddress6().get(i);
             System.out.println("Combine ke " + i + ": " + pdfFileName);
+            
+            String barcode = logModel.getIdCustomer().get(i);
+            kurir = logModel.getCourierName().get(i);
+            jnsAmplop = logModel.getSs2().get(i);
 
             PdfReader reader = new PdfReader(inputDir + pdfFileName);
             int numberOfPages = reader.getNumberOfPages();
-
-            for (int j = 1; j <= numberOfPages; j++) {
-                copy.addPage(copy.getImportedPage(reader, j));
+            
+            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+            PdfStamper stamper = new PdfStamper(reader, arrayOutputStream);
+             
+            for(int j=1; j <= numberOfPages; j++){
+                barcode = barcode + txt.norm6Digit(j);
+                isFirstPage = j == 1 ? true : false;
+                PdfContentByte canvas = stamper.getOverContent(j);
+                addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(j) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
+            }
+            
+            stamper.close();
+            reader.close();
+            
+            PdfReader pdfReader2 = new PdfReader(arrayOutputStream.toByteArray());
+            for (int j = 1; j <= pdfReader2.getNumberOfPages(); j++) {
+                copy.addPage(copy.getImportedPage(pdfReader2, j));
             }
 
-            reader.close();
+            pdfReader2.close();
         }
 
         System.out.println("Berhasil dicombine ke: " + outputFile.getAbsolutePath());
@@ -163,6 +187,36 @@ public class PdfProcessing {
             if (document.isOpen()) {
                 document.close();
             }
+        }
+    }
+    
+    private void addTextToPage(Boolean isFirstPage, PdfContentByte canvas, String text, String barcodeText, float x, float y) {
+        try {
+            
+            if(isFirstPage){
+                Barcode128 barcode = new Barcode128();
+                barcode.setCode(barcodeText);
+                barcode.setCodeType(Barcode128.CODE128);
+                barcode.setFont(null);
+                Image barcodeImage = barcode.createImageWithBarcode(canvas, null, null);
+                barcodeImage.setAbsolutePosition(x, y);
+                barcodeImage.scaleToFit(140,20);
+                canvas.addImage(barcodeImage);
+            } 
+            
+            BaseFont bf = BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.EMBEDDED);
+            canvas.beginText();
+            canvas.setFontAndSize(bf, 6);
+            canvas.setTextMatrix(x,y-10);
+            canvas.showText(text);
+            canvas.endText();
+            
+           
+            
+        } catch (DocumentException ex) {
+            Logger.getLogger(PdfProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PdfProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

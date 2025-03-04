@@ -23,6 +23,7 @@ public class GeneralProcess {
     private String readyToPrintCycleOutput = new String();
     private String readyToPrintCycleReport = new String();
     private String readyToPrintCycleLog = new String();
+    private String readyToPrintCycleLogProd = new String();
     private String readyToPrintCycleLogKurir = new String();
     private String readyToPrintCycleLogMaster = new String();
     private String readyToPrintCycleCombine = new String();
@@ -53,7 +54,7 @@ public class GeneralProcess {
             Directory dirPdf = new Directory();
             PdfProcessing processing = new PdfProcessing();
             dirPdf.scanPdfFile(inputDir);
-            String[] params = {readyToPrintCycleLog, readyToPrintCycleLogKurir, readyToPrintCycleLogMaster,
+            String[] params = {readyToPrintCycleLogProd, readyToPrintCycleLogKurir, readyToPrintCycleLogMaster,
                                 readyToPrintCycleOutput, readyToPrintCycleReport, readyToPrintCycleLogScan};
             processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, stmt);
             
@@ -68,16 +69,17 @@ public class GeneralProcess {
         PathDirectory pd = new PathDirectory();
         
         readyToPrintCycle = pd.configurePath(this.currentDirectory + "\\READY TO PRINT\\" + "BILLING RK " + cycle);
-        readyToPrintCycleLog = pd.configurePath(readyToPrintCycle + "\\LOG RK " + cycle);
+        readyToPrintCycleLogProd = pd.configurePath(readyToPrintCycle + "\\LOG PRODUKSI\\");
+        readyToPrintCycleLog = pd.configurePath(readyToPrintCycle + "\\LOG RK\\");
         readyToPrintCycleLogKurir = pd.configurePath(readyToPrintCycleLog  + "\\LOG KURIR\\");
-        readyToPrintCycleLogMaster = pd.configurePath(readyToPrintCycleLog + "\\LOG MAYBANK");
+        readyToPrintCycleLogMaster = pd.configurePath(readyToPrintCycleLog + "\\LOG MAYBANK\\");
         readyToPrintCycleOutput = pd.configurePath(readyToPrintCycle + "\\OUTPUT\\");
         readyToPrintCycleReport = pd.configurePath(readyToPrintCycle + "\\REPORT\\");
 //        readyToPrintCycleSorting = pd.configurePath(pathInput + "\\SORTATION\\");
         readyToPrintCycleLogScan = pd.configurePath(readyToPrintCycle + "\\LOG SCAN\\");
         String[] params = {readyToPrintCycle,readyToPrintCycleLog,readyToPrintCycleLogKurir,readyToPrintCycleLogMaster,
                             readyToPrintCycleOutput,readyToPrintCycleReport,readyToPrintCycleCombine,readyToPrintCycleSorting,
-                            readyToPrintCycleLogScan};
+                            readyToPrintCycleLogScan, readyToPrintCycleLogProd};
         pd.createDirectory(params);
         setResource();
     }

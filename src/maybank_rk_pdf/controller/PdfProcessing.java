@@ -55,6 +55,10 @@ public class PdfProcessing {
         uploadLogToDb(DirectoryInput + "Log All.txt", stmt);
 //        barcodeInjector(DirectoryInput,stmt);
         barcodeInjector2(DirectoryInput,stmt);
+        
+        LogModel logModel = new LogModel();
+        logModel.createTable(stmt);
+        logModel.loadLogData(dirLogProd + "LOG PRODUKSI.LOG", stmt);
                 
     }
     

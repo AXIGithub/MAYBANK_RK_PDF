@@ -91,7 +91,7 @@
                                       <Component id="jButton4" min="-2" pref="36" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jComboBox1cycle" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
-                                  <Component id="jComboBox2Reg" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jComboBox2Type" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jButton3" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -118,7 +118,7 @@
                                   <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                              <Component id="jComboBox2Reg" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBox2Type" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -199,16 +199,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox2Reg">
+            <Component class="javax.swing.JComboBox" name="jComboBox2Type">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="REGULER"/>
-                    <StringItem index="1" value="URGENT"/>
-                    <StringItem index="2" value="HOLD"/>
+                  <StringArray count="2">
+                    <StringItem index="0" value="KONVENSIONAL"/>
+                    <StringItem index="1" value="SYARIAH"/>
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox2TypeActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>

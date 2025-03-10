@@ -32,6 +32,7 @@ public class GeneralProcess {
     private String directoryResource = new String();
     private String directoryNormal = new String();
     private String inputDir = new String();
+    private String documentType = "";
     
     protected com.mysql.jdbc.Connection koneksi, koneksi1;
     protected Statement stmt, stmt1;
@@ -39,6 +40,7 @@ public class GeneralProcess {
     public GeneralProcess(String[] params){
         inputDir = params[0];
         cycle = params[1];
+        documentType = params[2];
         initializeDatabaseConnection();
     }
     
@@ -56,7 +58,7 @@ public class GeneralProcess {
             dirPdf.scanPdfFile(inputDir);
             String[] params = {readyToPrintCycleLogProd, readyToPrintCycleLogKurir, readyToPrintCycleLogMaster,
                                 readyToPrintCycleOutput, readyToPrintCycleReport, readyToPrintCycleLogScan};
-            processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, stmt);
+            processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, documentType, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

@@ -126,6 +126,8 @@ public class PdfProcessing {    private int omrSeq = 0;
                 kurir = logModel.getCourierName().get(i);
                 jnsAmplop = logModel.getSs2().get(i);
                 int kanwil = logModel.getS1().get(i);
+
+                kurir = jnsAmplop.contains("B") ? kurir+jnsAmplop : kurir;
                 
                 if(!jnsAmplop.contains(zJnsAmplop)){
                     document.close();

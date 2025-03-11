@@ -11,12 +11,14 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import maybank_rk_pdf.model.Connection;
+import maybank_rk_pdf.model.SummaryModel;
 
 /**
  *
  * @author Ratino
  */
 public class GeneralProcess {
+    SummaryModel summaryModel = new SummaryModel();
     private String cycle = new String();
     private String currentDirectory = new String();
     private String readyToPrintCycle = new String();
@@ -59,6 +61,8 @@ public class GeneralProcess {
             String[] params = {readyToPrintCycleLogProd, readyToPrintCycleLogKurir, readyToPrintCycleLogMaster,
                                 readyToPrintCycleOutput, readyToPrintCycleReport, readyToPrintCycleLogScan};
             processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, documentType, stmt);
+            //Create Report
+            summaryModel.createSumByKanwil(readyToPrintCycleReport, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -63,7 +64,7 @@ public class JFrameRK extends javax.swing.JFrame {
         Image img2 = icon2.getImage().getScaledInstance(jButton4.getWidth(), jButton4.getHeight(), Image.SCALE_SMOOTH);
         jButton4.setIcon(new ImageIcon(img2));
 
-        jComboBox1cycle.setEnabled(false);  jButton2.setEnabled(true); jComboBox2Reg.setEnabled(false);
+        jComboBox1cycle.setEnabled(false);  jButton2.setEnabled(true); jComboBox2Type.setEnabled(true);
         jButton3.setEnabled(false);jButton2.setEnabled(false); 
         jComboBox1cycle.setVisible(false);
         SetTime();
@@ -112,7 +113,7 @@ public class JFrameRK extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jTextDate = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
-        jComboBox2Reg = new javax.swing.JComboBox<>();
+        jComboBox2Type = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jComboBox1cycle = new javax.swing.JComboBox<>();
@@ -155,7 +156,12 @@ public class JFrameRK extends javax.swing.JFrame {
             }
         });
 
-        jComboBox2Reg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "REGULER", "URGENT", "HOLD" }));
+        jComboBox2Type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KONVENSIONAL", "SYARIAH" }));
+        jComboBox2Type.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2TypeActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("PROCESS");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -218,7 +224,7 @@ public class JFrameRK extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jComboBox1cycle, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2Reg, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox2Type, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(104, 104, 104))
@@ -238,7 +244,7 @@ public class JFrameRK extends javax.swing.JFrame {
                             .addComponent(jTextDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton4))
                         .addGap(7, 7, 7)
-                        .addComponent(jComboBox2Reg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox2Type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -316,10 +322,22 @@ public class JFrameRK extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        try {
+           long startRun = System.currentTimeMillis();
            cycle = jTextDate.getText().replace("-", "");
-           String[] params = {inputDir, cycle};
+           String docType = jComboBox2Type.getSelectedItem().toString();
+           String[] params = {inputDir, cycle, docType};
            GeneralProcess process = new GeneralProcess(params);
            process.doInProcess();
+           
+           long endProcess = System.currentTimeMillis();
+           
+           long duration = endProcess - startRun; 
+            long seconds = (duration / 1000) % 60;
+            long minutes = (duration / (1000 * 60)) % 60;
+            long hours = (duration / (1000 * 60 * 60)) % 24;
+
+            System.out.printf("Durasi: %02d:%02d:%02d\n", hours, minutes, seconds);
+           
        } catch (SQLException ex) {
            Logger.getLogger(JFrameRK.class.getName()).log(Level.SEVERE, null, ex);
        }
@@ -334,6 +352,10 @@ public class JFrameRK extends javax.swing.JFrame {
         jTextArea1.setText(jTextArea1.getText() + "CYCLE : " + jComboBox1cycle.getSelectedItem().toString()+"\n");
         jButton2.setEnabled(true);
     }//GEN-LAST:event_jComboBox1cycleActionPerformed
+
+    private void jComboBox2TypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2TypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox2TypeActionPerformed
 
     
     public void SetTime(){
@@ -403,7 +425,7 @@ public class JFrameRK extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1cycle;
-    private javax.swing.JComboBox<String> jComboBox2Reg;
+    private javax.swing.JComboBox<String> jComboBox2Type;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel2Icon;
     private javax.swing.JLabel jLabel3;

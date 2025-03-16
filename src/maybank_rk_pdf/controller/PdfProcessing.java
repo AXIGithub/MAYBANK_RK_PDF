@@ -40,21 +40,20 @@ import maybank_rk_pdf.model.LogModel;
  *
  * @author Ratino
  */
-public class PdfProcessing {
-    
+public class PdfProcessing {    private int omrSeq = 0;
     private String dirOutput, dirLogKurir, dirLogMaster, dirLogProd, dirReport, dirLogScan;
     private int seqP, seqA, SeqC;
-    public void runProcesing(String[] params, Directory dirPdf,String DirectoryInput, String parentInput, String type, Statement stmt) throws IOException, SQLException{
+    public void runProcesing(String[] params, Directory dirPdf,String DirectoryInput, String parentInput, String cycle, String docType, Statement stmt) throws IOException, SQLException{
         dirLogProd = params[0];
         dirLogKurir = params[1];
         dirLogMaster = params[2];
         dirOutput = params[3];
         dirReport = params[4];
         dirLogScan = params[5];
-        getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", type, stmt);
+        getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", cycle, stmt);
         uploadLogToDb(DirectoryInput + "Log All.txt", stmt);
 //        barcodeInjector(DirectoryInput,stmt);
-        barcodeInjector2(DirectoryInput,stmt);
+        barcodeInjector2(DirectoryInput, cycle, docType,stmt);
         
         LogModel logModel = new LogModel();
         logModel.createTable(stmt);
@@ -85,24 +84,29 @@ public class PdfProcessing {
     }
     
         
-    public void barcodeInjector2(String inputDir, Statement stmt) {
+    public void barcodeInjector2(String inputDir, String cycle, String jnsDocuemnt, Statement stmt) {
         Document document = new Document();
         PdfCopy copy = null;
         Boolean isFirstPage = false;
-        String kurir = "", jnsAmplop = "", logString="", barcode="";
+        String kurir = "", jnsAmplop = "", zJnsAmplop = "", logString="", barcode="", kodeDocument="";
         seqP=0; seqA=0; SeqC=0;
         try {
             TextModification txt = new TextModification();
             LocalDateTime dt = LocalDateTime.now();
             String dateTime = dt.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+            String cyBarcode = cycle.substring(0,4) + cycle.substring(cycle.length() -2, cycle.length()); //ddmmyy
 
             //Create file 
             FileOutputStream outputStream = new FileOutputStream(dirLogProd + "LOG PRODUKSI.LOG");
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(dataOutputStream));
+            
+            LogModel logModel = new LogModel();
+            logModel.selectTableForCustomer(stmt);
+            System.out.println("Total Customer: " + logModel.getIdCustomer().size());
+            jnsAmplop = logModel.getSs2().get(1);
 
-
-            File outputFile = new File(Paths.get(dirOutput, dateTime + "-000001-Print.pdf").toString());
+            File outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+".pdf").toString());
             if (!outputFile.getParentFile().exists()) {
                 outputFile.getParentFile().mkdirs();
             }
@@ -112,9 +116,7 @@ public class PdfProcessing {
             copy = new PdfCopy(document, fos);
             document.open();
 
-            LogModel logModel = new LogModel();
-            logModel.selectTableForCustomer(stmt);
-            System.out.println("Total Customer: " + logModel.getIdCustomer().size());
+            kodeDocument = (jnsDocuemnt.contains("SYARIAH")) ? "S" : "O";
 
             for (int i = 0; i < logModel.getIdCustomer().size(); i++) {
                 String pdfFileName = logModel.getAddress6().get(i);
@@ -123,6 +125,17 @@ public class PdfProcessing {
                 String idCustomer = logModel.getIdCustomer().get(i);
                 kurir = logModel.getCourierName().get(i);
                 jnsAmplop = logModel.getSs2().get(i);
+                int kanwil = logModel.getS1().get(i);
+
+                kurir = jnsAmplop.contains("B") ? kurir+jnsAmplop : kurir;
+                
+                if(!jnsAmplop.contains(zJnsAmplop)){
+                    document.close();
+                    outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+".pdf").toString());
+                    fos = new FileOutputStream(outputFile);
+                    copy = new PdfCopy(document, fos);
+                    document.open();
+                }
                 
                 seqA++;
                 SeqC++;
@@ -135,10 +148,16 @@ public class PdfProcessing {
 
                 for(int j=1; j <= numberOfPages; j++){
                     seqP++;
-                    barcode = idCustomer + txt.norm6Digit(j);
+                    barcode = cyBarcode +  kanwil + kodeDocument + txt.norm6Digit(seqA);
                     isFirstPage = j == 1 ? true : false;
                     PdfContentByte canvas = stamper.getOverContent(j);
-                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(j) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
+                    if(j == numberOfPages){
+                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR
+                    } else {
+                        drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
+                    }
+                    
+                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
                     
                     if(j==1){
                         logString = barcode + "\t" + idCustomer + "\t" + logModel.getName1().get(i) + "\t" + logModel.getName2().get(i) + "\t" + logModel.getName3().get(i) + "\t" +
@@ -161,6 +180,7 @@ public class PdfProcessing {
                     bw.write(logString);
                 }
                 
+                zJnsAmplop = jnsAmplop;
                 
 
                 stamper.close();
@@ -177,7 +197,7 @@ public class PdfProcessing {
             
             bw.flush();
             bw.close();
-
+            document.close();
             System.out.println("Berhasil dicombine ke: " + outputFile.getAbsolutePath());
 
         } catch (DocumentException | IOException ex) {
@@ -217,6 +237,7 @@ public class PdfProcessing {
         }
     }
     
+    
     public void uploadLogToDb(String pathLog, Statement stmt) throws SQLException{
         LogModel logModel = new LogModel();
         logModel.createTable(stmt);
@@ -225,7 +246,171 @@ public class PdfProcessing {
         logModel.setKurirByKanwil(stmt);
     }
     
-  
+    public void drawOmr(PdfContentByte cb,float x1, float x2, float y, boolean isClose, boolean b1, boolean b2, boolean b3, boolean b4, boolean b5, boolean b6){
+        String omr = new String();
+        String bar13 = new String();
+        String bar12 = new String();
+        String bar11 = new String();
+        String bar10 = new String();
+        String bar9 = new String();
+        String bar8 = new String();
+        String bar7 = new String();
+        String bar6 = new String();
+        String bar5 = new String();
+        String bar4 = new String();
+        String bar3 = new String();
+        String bar2 = new String();
+        int interval = 11;
+        int diff     = 0;
+        //String bar1 = "A";
+        x1 = x1-15;
+        x2 = x2-15;
+        drawLine(cb, x1, x2, y);
+        int counter = 1;
+
+        omrSeq++;
+        if(omrSeq == 1){
+            bar6 = "";
+            bar5 = "";
+            bar4 = "A";
+            diff = interval *3;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }else if(omrSeq ==2){
+            bar6 = "";
+            bar5 = "A";
+            bar4 = "";
+            diff = interval *4;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }else if(omrSeq ==3){
+            bar6 = "";
+            bar5 = "A";
+            bar4 = "A";
+            diff = interval *4;
+            drawLine(cb, x1, x2, y + diff);
+            diff = interval *3;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+            counter++;
+        }else if(omrSeq ==4){
+            bar6 = "A";
+            bar5 = "";
+            bar4 = "";
+            diff = interval *5;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }else if(omrSeq ==5){
+            bar6 = "A";
+            bar5 = "";
+            bar4 = "A";
+            diff = interval *5;
+            drawLine(cb, x1, x2, y + diff);
+            diff = interval *3;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+            counter++;
+        }else if(omrSeq ==6){
+            bar6 = "A";
+            bar5 = "A";
+            bar4 = "";
+            diff = interval *5;
+            drawLine(cb, x1, x2, y + diff);
+            diff = interval *4;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+            counter++;
+        }else if(omrSeq ==7){
+            bar6 = "A";
+            bar5 = "A";
+            bar4 = "A";
+            counter++;
+            counter++;
+            counter++;
+            diff = interval *5;
+            drawLine(cb, x1, x2, y + diff);
+            diff = interval *4;
+            drawLine(cb, x1, x2, y + diff);
+            diff = interval *3;
+            drawLine(cb, x1, x2, y + diff);
+            omrSeq = 0;
+        }
+
+        if(isClose == true){
+            bar3 = "";
+            bar2 = "A";
+
+            diff = interval *1;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }else{
+            bar3 = "A";
+            bar2 = "";
+            diff = interval *2;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+
+        if(b6==true){
+            bar12 = "A";
+            diff = interval *11;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+        if(b5==true){
+            bar11 = "A";
+            diff = interval *10;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+        if(b4==true){
+            bar10 = "A";
+            diff = interval *9;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+        if(b3==true){
+            bar9 = "A";
+            diff = interval *8;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+        if(b2==true){
+            bar8 = "A";
+            diff = interval *7;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+        if(b1==true){
+            bar7 = "A";
+            diff = interval *6;
+            drawLine(cb, x1, x2, y + diff);
+            counter++;
+        }
+
+        if((counter%2)==0){
+            bar13 = "";
+        }
+        else{
+            bar13 = "A";
+            diff = interval *12;
+            drawLine(cb, x1, x2, y + diff);
+        }
+        //System.out.println(counter + " " + counter%2);
+        //omr = "82|" + bar13 + "\r\n" + "82|" + bar12 + "\r\n" + "82|" + bar11 + "\r\n" + "82|" + bar10 + "\r\n" + "82|" + bar9 + "\r\n" + "82|" + bar8 + "\r\n" + "82|" + bar7 + "\r\n" + "82|" + bar6 + "\r\n" + "82|" + bar5 + "\r\n" + "82|" + bar4 + "\r\n" + "82|" + bar3 + "\r\n" + "82|" + bar2 + "\r\n" + "82|" + bar1 + "\r\n";
+        //return (omr);
+    }
+    
+    public void drawLine(PdfContentByte cb,float x1, float x2, float y) {
+        cb.setLineWidth(1f);
+        cb.moveTo(x1, y);
+        cb.lineTo(x2, y);
+        cb.moveTo(x1, y-1);
+        cb.lineTo(x2, y-1);
+        cb.moveTo(x1, y-2);
+        cb.lineTo(x2, y-2);
+        cb.stroke();
+    }
     
     
     

@@ -299,7 +299,7 @@ public class JFrameRK extends javax.swing.JFrame {
            jTextField1.setText(""+opn.getDirectory());
             //            jTextField1.setText(""+opn.selectDirectory());
             inputDir = pd.configurePath(jTextField1.getText());
-            jTextArea1.setText("============================================\n" + "Ready To Process...\n");
+            jTextArea1.setText("==========================================\n" + "Ready To Process...\n");
             jTextArea1.setText(jTextArea1.getText() + jTextDate.getText());
             jButton2.setEnabled(true);
             //            jComboBox1cycle.setEnabled(true);
@@ -335,8 +335,11 @@ public class JFrameRK extends javax.swing.JFrame {
             long seconds = (duration / 1000) % 60;
             long minutes = (duration / (1000 * 60)) % 60;
             long hours = (duration / (1000 * 60 * 60)) % 24;
-
-            System.out.printf("Durasi: %02d:%02d:%02d\n", hours, minutes, seconds);
+            
+            String durationFinal = String.format("Durasi: %02d:%02d:%02d\n", hours, minutes, seconds);
+            jTextArea1.append("\r\n" + durationFinal);
+            
+            System.out.printf(durationFinal);
            
        } catch (SQLException ex) {
            Logger.getLogger(JFrameRK.class.getName()).log(Level.SEVERE, null, ex);

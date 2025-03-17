@@ -80,7 +80,7 @@ public class SummaryModel {
             String query = "SELECT courier_name, s1 AS KANWIL, id_customer, name1, address1, address2, address3, address4, address5, address6 " +
                     "FROM t_log " +
                     "WHERE courier_name IN ('BLOK', 'HOLD', 'NCS', 'NCSB', 'NCSG', 'POS', 'POSB', 'SAP', 'SAPB', 'SAPG')" +
-                    "ORDER BY corier_name, s1, id_customer";
+                    "ORDER BY courier_name, s1, id_customer";
             hasilQuery = stmt.executeQuery(query);
             
             Map<String, BufferedWriter> fileWriter = new HashMap<>();
@@ -91,9 +91,9 @@ public class SummaryModel {
                 String fileName = kategori.toUpperCase()+ "_MASTER_" + courierName + "_RK_KANWIL_" + kanwil + ".txt";
                 
                 //Open File
-                BufferedWriter bw = fileWriter.get(fileName);
+                BufferedWriter bw = fileWriter.get(path + fileName);
                 if(bw == null){
-                    bw = new BufferedWriter(new FileWriter(fileName));
+                    bw = new BufferedWriter(new FileWriter( path + fileName));
                     fileWriter.put(fileName, bw);
 //                    bw.newLine();
                     

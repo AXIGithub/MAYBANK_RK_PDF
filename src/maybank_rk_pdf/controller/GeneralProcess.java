@@ -64,6 +64,7 @@ public class GeneralProcess {
             //Create Report
             summaryModel.createSumByKanwil(readyToPrintCycleReport, cycle, stmt);
             summaryModel.createSummary(readyToPrintCycleReport,cycle, documentType,stmt);
+            summaryModel.createLogByKanwil(readyToPrintCycleLogMaster, documentType, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

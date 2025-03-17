@@ -104,7 +104,7 @@ public class PdfProcessing {    private int omrSeq = 0;
             LogModel logModel = new LogModel();
             logModel.selectTableForCustomer(stmt);
             System.out.println("Total Customer: " + logModel.getIdCustomer().size());
-            jnsAmplop = logModel.getSs2().get(1);
+            jnsAmplop = logModel.getSs2().get(0);
 
             File outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+".pdf").toString());
             if (!outputFile.getParentFile().exists()) {
@@ -148,18 +148,27 @@ public class PdfProcessing {    private int omrSeq = 0;
 
                 for(int j=1; j <= numberOfPages; j++){
                     seqP++;
+                    if( ((j-1) % 6 == 0 && jnsAmplop.contains("A")) || ( (j - 1) % 100 == 0 && jnsAmplop.contains("B") )  && j != 1  ){
+                        seqA++;
+                    }
                     barcode = cyBarcode +  kanwil + kodeDocument + txt.norm6Digit(seqA);
                     isFirstPage = j == 1 ? true : false;
                     PdfContentByte canvas = stamper.getOverContent(j);
-                    if(j == numberOfPages){
+                    
+                    
+                    
+//                    if(j == numberOfPages){
+                    if( (j-1) % 6 == 0 && jnsAmplop.contains("A") ) {    
                         drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR
-                    } else {
+                    } else if(jnsAmplop.contains("A")) {
                         drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
                     }
                     
                     addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
                     
-                    if(j==1){
+//                    if(j==1){
+//                    if( (j-1) % 6 == 0 && jnsAmplop.contains("A")) {
+                    if( ((j-1) % 6 == 0 && jnsAmplop.contains("A")) || ( (j - 1) % 100 == 0 && jnsAmplop.contains("B") )  && j != 1  ){    
                         logString = barcode + "\t" + idCustomer + "\t" + logModel.getName1().get(i) + "\t" + logModel.getName2().get(i) + "\t" + logModel.getName3().get(i) + "\t" +
                                 logModel.getAddress1().get(i) + "\t" + logModel.getAddress2().get(i) + "\t" + logModel.getAddress3().get(i) + "\t" + logModel.getAddress4().get(i) + "\t" +
                                 logModel.getAddress5().get(i) + "\t" + "-" + "\t" + logModel.getB1().get(i) + "\t" + logModel.getB2().get(i) + "\t" + logModel.getB3().get(i) + "\t" +

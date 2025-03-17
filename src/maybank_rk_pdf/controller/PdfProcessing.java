@@ -104,7 +104,9 @@ public class PdfProcessing {    private int omrSeq = 0;
             LogModel logModel = new LogModel();
             logModel.selectTableForCustomer(stmt);
             System.out.println("Total Customer: " + logModel.getIdCustomer().size());
+
             jnsAmplop = logModel.getSs2().get(0);
+
 
             File outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+".pdf").toString());
             if (!outputFile.getParentFile().exists()) {
@@ -154,7 +156,15 @@ public class PdfProcessing {    private int omrSeq = 0;
                     barcode = cyBarcode +  kanwil + kodeDocument + txt.norm6Digit(seqA);
                     isFirstPage = j == 1 ? true : false;
                     PdfContentByte canvas = stamper.getOverContent(j);
+
+                    if(j == numberOfPages){
+                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR
+                    } else {
+                        drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
+                    }
                     
+                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
+                   
                     
                     
 //                    if(j == numberOfPages){

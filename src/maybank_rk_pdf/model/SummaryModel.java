@@ -5,10 +5,12 @@
  */
 package maybank_rk_pdf.model;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +20,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import maybank_rk_pdf.controller.TextModification;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.poi.sl.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -33,10 +37,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class SummaryModel {
     
+
     public void createSumByKanwil(String path, String cycle, Statement stmt){
         try {
             ResultSet hasilQuery = null;
-            hasilQuery = stmt.executeQuery("SELECT s1 AS KANWIL, COUNT(DISTINCT id_customer) AS NASABAH, COUNT(seq_page) AS HALAMAN, COUNT(s6) AMPLOP FROM t_log GROUP BY s1 ORDER BY s1");
+            hasilQuery = stmt.executeQuery("SELECT s1 AS KANWIL, COUNT(DISTINCT id_customer) AS NASABAH, COUNT(seq_page) AS HALAMAN, COUNT(s6) AMPLOP FROM t_log GROUP BY s1, ORDER BY s1");
+
             
             Workbook workbook = new XSSFWorkbook();
             org.apache.poi.ss.usermodel.Sheet sheet = workbook.createSheet("Summary Data");
@@ -75,6 +81,7 @@ public class SummaryModel {
         
     }
     
+
     public void createLogByKanwil(String path, String kategori, Statement stmt) {
     try {
         TextModification txt = new TextModification();
@@ -182,7 +189,7 @@ public class SummaryModel {
             Logger.getLogger(SummaryModel.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
-    
+
     private static CellStyle getHeaderStyle(Workbook workbook){
         CellStyle style = workbook.createCellStyle();
         Font font = workbook.createFont();

@@ -6,6 +6,7 @@
 package maybank_rk_pdf.model;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -74,57 +75,67 @@ public class SummaryModel {
         
     }
     
-    public void createLogByKanwil(String path, String kategori, Statement stmt){
-        try {
-            ResultSet hasilQuery = null;
-            String query = "SELECT courier_name, s1 AS KANWIL, id_customer, name1, address1, address2, address3, address4, address5, address6 " +
-                    "FROM t_log " +
-                    "WHERE courier_name IN ('BLOK', 'HOLD', 'NCS', 'NCSB', 'NCSG', 'POS', 'POSB', 'SAP', 'SAPB', 'SAPG')" +
-                    "ORDER BY courier_name, s1, id_customer";
-            hasilQuery = stmt.executeQuery(query);
-            
-            Map<String, BufferedWriter> fileWriter = new HashMap<>();
-            while(hasilQuery.next()){
-                String courierName = hasilQuery.getString("courier_name");
-                String kanwil = hasilQuery.getString("KANWIL");
+    public void createLogByKanwil(String path, String kategori, Statement stmt) {
+    try {
+        TextModification txt = new TextModification();
+
+        ResultSet hasilQuery = null;
+
+        // Query untuk mengambil data
+        String query = "SELECT barcode, courier_name, s1 AS KANWIL, id_customer, name1, address1, address2, address3, address4, address5, address6, s6 " +
+                       "FROM t_log " +
+                       "WHERE courier_name IN ('BLOK', 'HOLD', 'NCS', 'NCSB', 'NCSG', 'POS', 'POSB', 'SAP', 'SAPB', 'SAPG') AND s6 = 1 " +
+                       "ORDER BY courier_name, s1, id_customer";
+        hasilQuery = stmt.executeQuery(query);
+
+        // Map untuk menyimpan BufferedWriter untuk setiap file
+        Map<String, BufferedWriter> fileWriters = new HashMap<>();
+
+        while (hasilQuery.next()) {
+            String courierName = hasilQuery.getString("courier_name");
+            String kanwil = hasilQuery.getString("KANWIL");
+
+            // Nama file
+            String fileName = kategori.toUpperCase() + "_MASTER_" + courierName + "_RK_KANWIL_" + kanwil + ".txt";
+
+            // Dapatkan BufferedWriter untuk file ini
+            BufferedWriter bw1 = fileWriters.get(fileName);
+
+            // Jika BufferedWriter belum ada, buat baru
+            if (bw1 == null) {
+                bw1 = new BufferedWriter(new FileWriter(path + fileName));
+                fileWriters.put(fileName, bw1);
+
                 
-                String fileName = kategori.toUpperCase()+ "_MASTER_" + courierName + "_RK_KANWIL_" + kanwil + ".txt";
-                
-                //Open File
-                BufferedWriter bw = fileWriter.get(path + fileName);
-                if(bw == null){
-                    bw = new BufferedWriter(new FileWriter( path + fileName));
-                    fileWriter.put(fileName, bw);
-//                    bw.newLine();
-                    
-                }
-                bw.write(courierName + "," +
-                        kanwil + "," +
-                        hasilQuery.getString("id_customer") + "," + 
-                        hasilQuery.getString("name1") + "," +
-                        hasilQuery.getString("address1") + "," +
-                        hasilQuery.getString("address2") + "," +
-                        hasilQuery.getString("address3") + "," +
-                        hasilQuery.getString("address4") + "," +
-                        hasilQuery.getString("address5") + "," +
-                        hasilQuery.getString("address6"));
-                bw.newLine();
             }
-            //Close all file
-            for(BufferedWriter bw : fileWriter.values()){
-                bw.flush();
-                bw.close();
-            }
-            System.out.println("File Berhasil dibuat");
-            
-        } catch (SQLException ex) {
-            System.out.println("Error SQL in createLogByKanwil ");
-            Logger.getLogger(SummaryModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            System.out.println("Error File Writer in ");
-            Logger.getLogger(SummaryModel.class.getName()).log(Level.SEVERE, null, ex);
+ 
+            // Tulis data ke file
+            bw1.write(txt.padRStr(hasilQuery.getString("barcode"), 14, ' ') +
+                      txt.padRStr(hasilQuery.getString("name1"), 40, ' ') +
+                      txt.padRStr(hasilQuery.getString("address1"), 40, ' ') +
+                      txt.padRStr(hasilQuery.getString("address2"), 40, ' ') +
+                      txt.padRStr(hasilQuery.getString("address6"), 9, ' ') + // Kode Pos
+                      txt.padRStr(hasilQuery.getString("s6"), 1, ' ') +       // Jumlah Amplop
+                      txt.padRStr(hasilQuery.getString("courier_name"), 8, ' ')); // Kurir
+            bw1.newLine();
         }
+
+        // Tutup semua BufferedWriter
+        for (BufferedWriter bw : fileWriters.values()) {
+            bw.flush();
+            bw.close();
+        }
+
+        System.out.println("File berhasil dibuat!");
+
+    } catch (SQLException ex) {
+        System.out.println("Error SQL in createLogByKanwil");
+        ex.printStackTrace();
+    } catch (IOException ex) {
+        System.out.println("Error File Writer in createLogByKanwil");
+        ex.printStackTrace();
     }
+}
     
     
     public void createSummary(String path, String cycle, String product, Statement stmt){

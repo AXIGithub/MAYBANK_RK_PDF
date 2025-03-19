@@ -106,9 +106,10 @@ public class PdfProcessing {    private int omrSeq = 0;
             System.out.println("Total Customer: " + logModel.getIdCustomer().size());
 
             jnsAmplop = logModel.getSs2().get(0);
+            kurir = logModel.getCourierName().get(0);
 
 
-            File outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+".pdf").toString());
+            File outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+"-"+kurir+".pdf").toString());
             if (!outputFile.getParentFile().exists()) {
                 outputFile.getParentFile().mkdirs();
             }
@@ -133,7 +134,7 @@ public class PdfProcessing {    private int omrSeq = 0;
                 
                 if(!jnsAmplop.contains(zJnsAmplop)){
                     document.close();
-                    outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+".pdf").toString());
+                    outputFile = new File(Paths.get(dirOutput, "MAYBANK-" + dateTime + "-000001-"+jnsAmplop+"-"+kurir+".pdf").toString());
                     fos = new FileOutputStream(outputFile);
                     copy = new PdfCopy(document, fos);
                     document.open();
@@ -184,7 +185,7 @@ public class PdfProcessing {    private int omrSeq = 0;
                                 logModel.getAddress5().get(i) + "\t" + "-" + "\t" + logModel.getB1().get(i) + "\t" + logModel.getB2().get(i) + "\t" + logModel.getB3().get(i) + "\t" +
                                 logModel.getB4().get(i) + "\t" + logModel.getB5().get(i) + "\t" + logModel.getB6().get(i) + "\t" + logModel.getS1().get(i) + "\t" + logModel.getS2().get(i) + "\t" +
                                 logModel.getS3().get(i) + "\t" +logModel.getS4().get(i) + "\t" + logModel.getS5().get(i) + "\t" + logModel.getS6().get(i) + "\t"  + logModel.getProductName().get(i) + "\t" +
-                                logModel.getCourierName().get(i) + "\t" + seqP + "\t" + SeqC + "\t" + seqA + "\t" + logModel.getSs1().get(i) + "\t" + logModel.getSs2().get(i) + "\t" +
+                                kurir + "\t" + seqP + "\t" + SeqC + "\t" + seqA + "\t" + logModel.getSs1().get(i) + "\t" + logModel.getSs2().get(i) + "\t" +
                                 logModel.getSs3().get(i) + "\t" + logModel.getSs4().get(i) + "\t" + logModel.getSs5().get(i) + "\t" + logModel.getSs6().get(i) + "\r\n" ;
                     } else {
                         logString = barcode + "\t" + idCustomer + "\t" + logModel.getName1().get(i) + "\t" + logModel.getName2().get(i) + "\t" + logModel.getName3().get(i) + "\t" +
@@ -192,7 +193,7 @@ public class PdfProcessing {    private int omrSeq = 0;
                                 logModel.getAddress5().get(i) + "\t" + "-" + "\t" + logModel.getB1().get(i) + "\t" + logModel.getB2().get(i) + "\t" + logModel.getB3().get(i) + "\t" +
                                 logModel.getB4().get(i) + "\t" + logModel.getB5().get(i) + "\t" + logModel.getB6().get(i) + "\t" + logModel.getS1().get(i) + "\t" + logModel.getS2().get(i) + "\t" +
                                 logModel.getS3().get(i) + "\t" +logModel.getS4().get(i) + "\t" + logModel.getS5().get(i) + "\t" + "0" + "\t"  + logModel.getProductName().get(i) + "\t" +
-                                logModel.getCourierName().get(i) + "\t" + seqP + "\t" + SeqC + "\t" + seqA + "\t" + logModel.getSs1().get(i) + "\t" + logModel.getSs2().get(i) + "\t" +
+                                kurir + "\t" + seqP + "\t" + SeqC + "\t" + seqA + "\t" + logModel.getSs1().get(i) + "\t" + logModel.getSs2().get(i) + "\t" +
                                 logModel.getSs3().get(i) + "\t" + logModel.getSs4().get(i) + "\t" + logModel.getSs5().get(i) + "\t" + logModel.getSs6().get(i) + "\r\n" ;
                     }
                     

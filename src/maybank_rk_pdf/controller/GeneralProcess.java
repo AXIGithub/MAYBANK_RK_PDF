@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import maybank_rk_pdf.model.Connection;
+import maybank_rk_pdf.model.LogMaybank;
 import maybank_rk_pdf.model.SummaryModel;
 
 /**
@@ -19,6 +20,7 @@ import maybank_rk_pdf.model.SummaryModel;
  */
 public class GeneralProcess {
     SummaryModel summaryModel = new SummaryModel();
+    LogMaybank logMaybank = new LogMaybank();
     private String cycle = new String();
     private String currentDirectory = new String();
     private String readyToPrintCycle = new String();
@@ -64,8 +66,8 @@ public class GeneralProcess {
             //Create Report
             summaryModel.createSumByKanwil(readyToPrintCycleReport, cycle, stmt);
             summaryModel.createSummary(readyToPrintCycleReport,cycle, documentType,stmt);
-            summaryModel.createLogByKanwil(readyToPrintCycleLogMaster, documentType, stmt);
-
+            summaryModel.createLogByKanwil(readyToPrintCycleLogKurir, documentType, stmt);
+            logMaybank.createLogAllMaybank(readyToPrintCycleLogMaster, documentType, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

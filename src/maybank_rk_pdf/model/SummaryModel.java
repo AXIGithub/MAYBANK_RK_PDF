@@ -112,9 +112,7 @@ public class SummaryModel {
             // Jika BufferedWriter belum ada, buat baru
             if (bw1 == null) {
                 bw1 = new BufferedWriter(new FileWriter(path + fileName));
-                fileWriters.put(fileName, bw1);
-
-                
+                fileWriters.put(fileName, bw1);                
             }
  
             // Tulis data ke file
@@ -190,7 +188,8 @@ public class SummaryModel {
             Logger.getLogger(SummaryModel.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
-
+    
+    
     private static CellStyle getHeaderStyle(Workbook workbook){
         CellStyle style = workbook.createCellStyle();
         Font font = workbook.createFont();

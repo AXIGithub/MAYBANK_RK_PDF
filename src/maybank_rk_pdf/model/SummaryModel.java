@@ -44,7 +44,7 @@ public class SummaryModel {
     public void createSumByKanwil(String path, String cycle, Statement stmt){
         try {
             ResultSet hasilQuery = null;
-            hasilQuery = stmt.executeQuery("SELECT s1 AS KANWIL, COUNT(DISTINCT id_customer) AS NASABAH, COUNT(seq_page) AS HALAMAN, COUNT(s6) AMPLOP FROM t_log GROUP BY s1, ORDER BY s1");
+            hasilQuery = stmt.executeQuery("SELECT s1 AS KANWIL, COUNT(DISTINCT id_customer) AS NASABAH, COUNT(seq_page) AS HALAMAN, SUM(s6) AMPLOP FROM t_log GROUP BY s1 ORDER BY s1");
            
             Workbook workbook = new XSSFWorkbook();
             org.apache.poi.ss.usermodel.Sheet sheet = workbook.createSheet("Summary Data");

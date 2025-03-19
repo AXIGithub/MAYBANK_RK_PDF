@@ -62,7 +62,8 @@ public class GeneralProcess {
                                 readyToPrintCycleOutput, readyToPrintCycleReport, readyToPrintCycleLogScan};
             processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, documentType, stmt);
             //Create Report
-            summaryModel.createSumByKanwil(readyToPrintCycleReport, stmt);
+            summaryModel.createSumByKanwil(readyToPrintCycleReport, cycle, stmt);
+            summaryModel.createSummary(readyToPrintCycleReport,cycle, documentType,stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

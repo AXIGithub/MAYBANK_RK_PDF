@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -298,7 +299,7 @@ public class JFrameRK extends javax.swing.JFrame {
            jTextField1.setText(""+opn.getDirectory());
             //            jTextField1.setText(""+opn.selectDirectory());
             inputDir = pd.configurePath(jTextField1.getText());
-            jTextArea1.setText("============================================\n" + "Ready To Process...\n");
+            jTextArea1.setText("==========================================\n" + "Ready To Process...\n");
             jTextArea1.setText(jTextArea1.getText() + jTextDate.getText());
             jButton2.setEnabled(true);
             //            jComboBox1cycle.setEnabled(true);
@@ -321,11 +322,25 @@ public class JFrameRK extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        try {
+           long startRun = System.currentTimeMillis();
            cycle = jTextDate.getText().replace("-", "");
            String docType = jComboBox2Type.getSelectedItem().toString();
            String[] params = {inputDir, cycle, docType};
            GeneralProcess process = new GeneralProcess(params);
            process.doInProcess();
+           
+           long endProcess = System.currentTimeMillis();
+           
+           long duration = endProcess - startRun; 
+            long seconds = (duration / 1000) % 60;
+            long minutes = (duration / (1000 * 60)) % 60;
+            long hours = (duration / (1000 * 60 * 60)) % 24;
+            
+            String durationFinal = String.format("Durasi: %02d:%02d:%02d\n", hours, minutes, seconds);
+            jTextArea1.append("\r\n" + durationFinal);
+            
+            System.out.printf(durationFinal);
+           
        } catch (SQLException ex) {
            Logger.getLogger(JFrameRK.class.getName()).log(Level.SEVERE, null, ex);
        }

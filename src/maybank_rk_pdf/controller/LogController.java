@@ -9,6 +9,8 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import maybank_rk_pdf.model.LogModel;
 
 /**
@@ -22,9 +24,14 @@ public class LogController {
     
     LogModel log = new LogModel();
     
-    public void setConnection() throws SQLException{
-        koneksi = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/db_myb_rk?autoReconnect=true&failOverReadonly=true&maxReconnects=1000", "root", "");
-        stmt =  (Statement) koneksi.createStatement();
+    public void setConnection(){
+        try {
+            koneksi = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/db_myb_rk?autoReconnect=true&failOverReadonly=true&maxReconnects=1000", "root", "");
+            stmt =  (Statement) koneksi.createStatement();
+        } catch (SQLException ex) {
+            System.out.println("Error setConnection : Cek XAMPP");
+            Logger.getLogger(LogController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void uploadDataKanwil(String path) throws SQLException{

@@ -32,8 +32,13 @@ public class LogMaybank {
     public void createLogAllMaybank(String path, String kategori, Statement stmt){
         try {
             LocalDate date = LocalDate.now();
+            LocalDate nextDay = date.plusDays(1);
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String dateNow = dateTimeFormatter.format(date);
+            String nextDayFormat = dateTimeFormatter.format(nextDay);
+            
+            
+            
             String fileOut = pd.configurePath(path + kategori + "_MASTER_MAYBANK_RK_ALL" + ".txt");                        
             
             ResultSet hasilQuery = null;
@@ -51,15 +56,20 @@ public class LogMaybank {
                         text.padRStr(hasilQuery.getString("barcode"), 28, ' ') + //  padRStr(barcode,28,' ')
                         text.padRStr(hasilQuery.getString("cif"), 16, ' ') + //padRStr(CIF,16,' ')                       
                         text.padRStr(hasilQuery.getString("id_customer"), 48, ' ') + // padRStr(policy,48,' ')t+
-                        text.padRStr(hasilQuery.getString("name1"), 30, ' ') +
-                        text.padRStr(hasilQuery.getString("address1"), 30, ' ') +
-                        text.padRStr(hasilQuery.getString("address2"), 30, ' ') +
-                        text.padRStr(hasilQuery.getString("address3"), 30, ' ') +
-                        text.padRStr(hasilQuery.getString("address4"), 30, ' ') +
-//                        text.padRStr(hasilQuery.getString(""), 30, ' ') +
-                        dateNow +
-                        text.padRStr("MAIL",8,' ') +
-                        "\r\n"                        
+                        text.padRStr(hasilQuery.getString("name1"), 30, ' ') + // padRStr(copy(nama,1,30),30,' ')
+                        text.padRStr(hasilQuery.getString("address1"), 30, ' ') +  // padRStr(copy(addr1,1,30),30,' ')+
+                        text.padRStr(hasilQuery.getString("address2"), 30, ' ') +  // padRStr(copy(addr2,1,30),30,' ')+
+                        text.padRStr(hasilQuery.getString("address3"), 30, ' ') + // padRStr(copy(addr3,1,30),30,' ')+
+                        text.padRStr(hasilQuery.getString("address4"), 30, ' ') +  // padRStr(copy(addr4,1,30),30,' ')+
+                        text.padRStr(hasilQuery.getString("address5"), 28, ' ') +  // padRStr(uppercase(kota),28,' ')+padRStr(Zipcode,234,' ')+padRStr(tanggalCPDP,10,' ')+padRStr(copy(GRUPkurir,1,5),4,' ')+padLStr(inttostr(jumpage),5,' ')+padLStr(inttostr(jumAMPall),5,' ')+padRStr(kurir,5,' ')+padRStr(pickupDate,41,' ')+'.');
+                        text.padRStr(hasilQuery.getString("address6"), 234, ' ') +  // padRStr(Zipcode,234,' ')+
+                        text.padRStr(dateNow,10, ' ') +                             // padRStr(tanggalCPDP,10,' ')+
+                        text.padRStr("MAIL",4,' ') +     // padRStr(copy(GRUPkurir,1,5),4,' ')+
+                        text.padRStr(hasilQuery.getString("ss1"), 5, ' ') +  // padLStr(inttostr(jumpage),5,' ')+
+                        text.padRStr("0",5,' ') +   // padLStr(inttostr(jumAMPall),5,' ')+
+                        text.padRStr(hasilQuery.getString("courier_name"), 5, ' ') +  // padRStr(kurir,5,' ')+      
+                        text.padRStr(nextDayFormat,41,' ') +        // padRStr(pickupDate,41,' ')+'.');
+                                "\r\n"                        
                 );
             }
             

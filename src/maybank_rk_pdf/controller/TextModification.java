@@ -1061,5 +1061,17 @@ private static final String[] ANGKA = {"", "satu", "dua", "tiga", "empat", "lima
             return S;
         }
     }
+    
+    public static String padLStr(String S, int Len, char C) {
+        int L = S.length();
+        if (L > Len) {
+            return S.substring(0, Len);
+        }
+        if (L < Len) {
+            return new String(new char[Len - L]).replace('\0', C) + S;
+        }
+        return S;
+    }
+
 
 }

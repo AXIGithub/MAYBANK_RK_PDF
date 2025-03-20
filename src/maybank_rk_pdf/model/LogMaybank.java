@@ -36,8 +36,7 @@ public class LogMaybank {
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String dateNow = dateTimeFormatter.format(date);
             String nextDayFormat = dateTimeFormatter.format(nextDay);
-            
-            
+                        
             
             String fileOut = pd.configurePath(path + kategori + "_MASTER_MAYBANK_RK_ALL" + ".txt");                        
             

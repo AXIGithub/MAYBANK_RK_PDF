@@ -68,6 +68,8 @@ public class GeneralProcess {
             summaryModel.createSummary(readyToPrintCycleReport,cycle, documentType,stmt);
             summaryModel.createLogByKanwil(readyToPrintCycleLogKurir, documentType, stmt);
             logMaybank.createLogAllMaybank(readyToPrintCycleLogMaster, documentType, stmt);
+            logMaybank.createLogKanwil(readyToPrintCycleLogMaster,documentType, stmt);
+            logMaybank.createLogAllADD40(readyToPrintCycleLogMaster, documentType, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

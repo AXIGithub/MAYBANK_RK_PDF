@@ -181,7 +181,8 @@ public class LogModel {
     
     public void setNmCabang(Statement stmt){
         try {
-            stmt.executeUpdate("UPDATE t_log SET ss3 = SELECT cabang WHERE t_kanwil.kode_cabang = t_log.name2) WHERE EXIST (SELECT 1 FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2)");
+            System.out.println("Set Nama Cabang");
+            stmt.executeUpdate("UPDATE t_log SET ss3 = (SELECT cabang WHERE t_kanwil.kode_cabang = t_log.name2) WHERE EXIST (SELECT 1 FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2)");
         } catch (SQLException ex) {
             Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, null, ex);
         }

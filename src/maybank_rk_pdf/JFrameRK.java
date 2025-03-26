@@ -53,6 +53,7 @@ public class JFrameRK extends javax.swing.JFrame {
     public String readyToPrintCySortingDirectory = new String();
     public JFrameRK() {
         initComponents();
+        System.out.println("Init");
         this.setLocationRelativeTo(null);
         init();
     }

@@ -16,6 +16,7 @@ public class Maybank_RK_PDF {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        System.out.println("RUn!");
         new JFrameRK().setVisible(true);
     }
     

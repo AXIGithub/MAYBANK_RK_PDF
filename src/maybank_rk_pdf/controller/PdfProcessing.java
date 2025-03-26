@@ -263,6 +263,7 @@ public class PdfProcessing {    private int omrSeq = 0;
         logModel.createTable(stmt);
         logModel.loadLogData(pathLog, stmt);
         logModel.setKodeKanwil(stmt);
+        logModel.setNmCabang(stmt);
         logModel.setKurirByKanwil(stmt);
     }
     

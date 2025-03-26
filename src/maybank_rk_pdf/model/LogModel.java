@@ -71,7 +71,7 @@ public class LogModel {
                     "address3 VARCHAR(100) NOT NULL, address4 VARCHAR(100) NOT NULL, address5 VARCHAR(100) NOT NULL, address6 VARCHAR(100) NOT NULL, b1 INT NOT NULL, " +
                     "b2 INT NOT NULL, b3 INT NOT NULL, b4 CHAR(30) NOT NULL, b5 INT NOT NULL, b6 INT NOT NULL, s1 INT NOT NULL, s2 INT NOT NULL, s3 INT NOT NULL, s4 INT NOT NULL, " +
                     "s5 INT NOT NULL, s6 INT NOT NULL, product_name VARCHAR(100) NOT NULL, courier_name VARCHAR(100) NOT NULL, seq_page INT NOT NULL, seq_customer INT NOT NULL, " +
-                    "seq_envelope INT NOT NULL, ss1 CHAR(30) NOT NULL, ss2 VARCHAR(5) NOT NULL, ss3 CHAR(30) NOT NULL, ss4 CHAR(30) NOT NULL, ss5 CHAR(30) NOT NULL, ss6 CHAR(30) NOT NULL) ENGINE = MYISAM");
+                    "seq_envelope INT NOT NULL, ss1 CHAR(30) NOT NULL, ss2 VARCHAR(5) NOT NULL, ss3 VARCHAR(100) NOT NULL, ss4 CHAR(30) NOT NULL, ss5 CHAR(30) NOT NULL, ss6 CHAR(30) NOT NULL) ENGINE = MYISAM");
             stmt.executeUpdate("ALTER TABLE t_log ADD INDEX tb_log_index1 (product_name,name2)");
             stmt.executeUpdate("ALTER TABLE t_log ADD INDEX tb_log_index2 (product_name)");
             stmt.executeUpdate("ALTER TABLE t_log ADD INDEX tb_log_index3 (courier_name,product_name)");
@@ -114,7 +114,7 @@ public class LogModel {
                 courierName.add(hasilQuery.getString("courier_name"));
                 ss1.add(hasilQuery.getString("ss1")); // Total Halaman
                 ss2.add(hasilQuery.getString("ss2")); // Jenis Amplop
-                ss3.add(hasilQuery.getString("ss3"));
+                ss3.add(hasilQuery.getString("ss3"));  // Nama Cabang
                 ss4.add(hasilQuery.getString("ss4"));
                 ss5.add(hasilQuery.getString("ss5"));
                 ss6.add(hasilQuery.getString("ss6"));
@@ -175,6 +175,14 @@ public class LogModel {
             System.out.println("Done");
         } catch (SQLException ex) {
             System.out.println("Set Kode Kanwil Error!!");
+            Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void setNmCabang(Statement stmt){
+        try {
+            stmt.executeUpdate("UPDATE t_log SET ss3 = SELECT cabang WHERE t_kanwil.kode_cabang = t_log.name2) WHERE EXIST (SELECT 1 FROM t_kanwil WHERE t_kanwil.kode_cabang = t_log.name2)");
+        } catch (SQLException ex) {
             Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

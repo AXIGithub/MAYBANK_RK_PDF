@@ -53,8 +53,17 @@ public class P01Model {
                     writer.write("NFILE\tKCAB\tCABANG\tJUMLAH\tLEMBAR\tAMPLOP");
                     writer.newLine();
                 }
-                System.out.println("File P01 XLS berhasil dibuat!");
+                
+                writer.write(courierName + "\t" +
+                             kcab + "\t" +
+                             cabang + "\t" +
+                             jumlahLembar + "\t" +
+                             jumlahLembar + "\t" +
+                             jumlahAmplop);
+                writer.newLine();
+                
             }
+            System.out.println("File P01 XLS berhasil dibuat!");
             
         } catch (SQLException | IOException ex) {
             Logger.getLogger(P01Model.class.getName()).log(Level.SEVERE, null, ex);        

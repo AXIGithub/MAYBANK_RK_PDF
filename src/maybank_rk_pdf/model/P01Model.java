@@ -32,7 +32,7 @@ public class P01Model {
                     "FROM t_log " +
                     "GROUP BY courier_name, name2, s1 " +
                     "ORDER BY s1, courier_name, name2";
-            
+            System.out.println("Query p01 : " + query);
             hasilQuery = stmt.executeQuery(query);
             while(hasilQuery.next()){
                 String courierName = hasilQuery.getString("NFILE");

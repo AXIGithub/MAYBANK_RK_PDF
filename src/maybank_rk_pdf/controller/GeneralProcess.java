@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import maybank_rk_pdf.model.Connection;
 import maybank_rk_pdf.model.LogMaybank;
+import maybank_rk_pdf.model.P01Model;
 import maybank_rk_pdf.model.SummaryModel;
 
 /**
@@ -21,6 +22,7 @@ import maybank_rk_pdf.model.SummaryModel;
 public class GeneralProcess {
     SummaryModel summaryModel = new SummaryModel();
     LogMaybank logMaybank = new LogMaybank();
+    P01Model p01Model = new P01Model();
     private String cycle = new String();
     private String currentDirectory = new String();
     private String readyToPrintCycle = new String();
@@ -70,6 +72,8 @@ public class GeneralProcess {
             logMaybank.createLogAllMaybank(readyToPrintCycleLogMaster, documentType, stmt);
             logMaybank.createLogKanwil(readyToPrintCycleLogMaster,documentType, stmt);
             logMaybank.createLogAllADD40(readyToPrintCycleLogMaster, documentType, stmt);
+            
+            p01Model.createP01Xls(readyToPrintCycleLog, stmt);
             
         } catch (IOException ex) {
             Logger.getLogger(GeneralProcess.class.getName()).log(Level.SEVERE, null, ex);

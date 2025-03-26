@@ -43,7 +43,7 @@ public class LogMaybank {
             
             ResultSet hasilQuery = null;
             // writeln(logFile            ,padLStr(copy(kanwil,1,2),2,'0')+padRStr(copy(cabang,1,40),40,' ')+ copy(policy,2,3) +padRStr(barcode,28,' ')+padRStr(CIF,16,' ')+padRStr(policy,48,' ')+padRStr(copy(nama,1,30),30,' ')+padRStr(copy(addr1,1,30),30,' ')+padRStr(copy(addr2,1,30),30,' ')+padRStr(copy(addr3,1,30),30,' ')+padRStr(copy(addr4,1,30),30,' ')+padRStr(uppercase(kota),28,' ')+padRStr(Zipcode,234,' ')+padRStr(tanggalCPDP,10,' ')+padRStr(copy(GRUPkurir,1,5),4,' ')+padLStr(inttostr(jumpage),5,' ')+padLStr(inttostr(jumAMPall),5,' ')+padRStr(kurir,5,' ')+padRStr(pickupDate,41,' ')+'.');
-            hasilQuery = stmt.executeQuery("SELECT s1 AS kanwil, name2 AS kd_cabang, id_customer, barcode, name3 AS cif, name1, address1, address2, address3, address4, address5, address6, courier_name, ss1 FROM t_log GROUP BY id_customer ORDER BY courier_name");
+            hasilQuery = stmt.executeQuery("SELECT s1 AS kanwil, ss3 AS kd_cabang, id_customer, barcode, name3 AS cif, name1, address1, address2, address3, address4, address5, address6, courier_name, ss1 FROM t_log GROUP BY id_customer ORDER BY courier_name");
             
             BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut));
             
@@ -95,7 +95,7 @@ public class LogMaybank {
             ResultSet hasilQuery = null;
             Map<String, BufferedWriter> fileWriters = new HashMap<>();
             
-            String query = "SELECT barcode, id_customer, name2 AS kd_cabang,  name3 AS cif, courier_name, name1, address1, address2, address3, address4, address5, address6, s1 AS KANWIL, courier_name, ss1 " +
+            String query = "SELECT barcode, id_customer, ss3 AS kd_cabang,  name3 AS cif, courier_name, name1, address1, address2, address3, address4, address5, address6, s1 AS KANWIL, courier_name, ss1 " +
                     "FROM t_log " +
                     "GROUP BY id_customer ORDER BY courier_name";
             
@@ -162,7 +162,7 @@ public class LogMaybank {
             ResultSet hasilQuery = null;
             Map<String, BufferedWriter> fileWriters = new HashMap<>();
             
-            String query = "SELECT barcode, id_customer, name2 AS kd_cabang,  name3 AS cif, courier_name, name1, address1, address2, address3, address4, address5, address6, s1 AS KANWIL, courier_name, ss1 " +
+            String query = "SELECT barcode, id_customer, ss3 AS cabang,  name3 AS cif, courier_name, name1, address1, address2, address3, address4, address5, address6, s1 AS KANWIL, courier_name, ss1 " +
                     "FROM t_log " +
                     "GROUP BY id_customer ORDER BY courier_name";
             
@@ -179,7 +179,7 @@ public class LogMaybank {
                 
                 String data = 
                         text.padRStr(text.norm2Digit(hasilQuery.getInt("kanwil")), 2, ' ') + // kanwil //padLStr(copy(kanwil,1,2),2,'0')
-                        text.padRStr(hasilQuery.getString("kd_cabang"), 40, ' ') + //nama CAbang  padRStr(copy(cabang,1,40),40,' ')
+                        text.padRStr(hasilQuery.getString("cabang"), 40, ' ') + //nama CAbang  padRStr(copy(cabang,1,40),40,' ')
                         hasilQuery.getString("id_customer").substring(2, 5) + //  No rek //copy(policy,2,3)
                         text.padRStr(hasilQuery.getString("barcode"), 28, ' ') + //  padRStr(barcode,28,' ')
                         text.padRStr(hasilQuery.getString("cif"), 16, ' ') + //padRStr(CIF,16,' ')                       

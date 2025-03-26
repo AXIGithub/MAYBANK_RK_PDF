@@ -28,7 +28,7 @@ public class P01Model {
         try {
             
             ResultSet hasilQuery = null;
-            String query = "SELECT courier_name AS NFILE, name2 AS KCAB, name2 AS CABANG, COUNT(id_customer) AS JUMLAH_LEMBAR, SUM(s6) AS JUMLAH_AMPLOP, s1 AS KANWIL " +
+            String query = "SELECT courier_name AS NFILE, name2 AS KCAB, ss3 AS CABANG, COUNT(id_customer) AS JUMLAH_LEMBAR, SUM(s6) AS JUMLAH_AMPLOP, s1 AS KANWIL " +
                     "FROM t_log " +
                     "GROUP BY courier_name, name2, s1 " +
                     "ORDER BY s1, courier_name, name2";

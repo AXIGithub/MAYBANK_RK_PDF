@@ -114,6 +114,7 @@ $RECYCLE.BIN/
 font needed.txt
 NOTE.TXT
 # other Folder
+nbproject/
 INPUT/
 dist/
 build/

@@ -62,6 +62,7 @@ public class GeneralProcess {
             Directory dirPdf = new Directory();
             PdfProcessing processing = new PdfProcessing();
             dirPdf.scanPdfFile(inputDir);
+            
             String[] params = {readyToPrintCycleLogProd, readyToPrintCycleLogKurir, readyToPrintCycleLogMaster,
                                 readyToPrintCycleOutput, readyToPrintCycleReport, readyToPrintCycleLogScan};
             processing.runProcesing(params, dirPdf, inputDir, inputDir, cycle, documentType, stmt);
@@ -85,7 +86,7 @@ public class GeneralProcess {
         this.currentDirectory = path;
         PathDirectory pd = new PathDirectory();
         
-        readyToPrintCycle = pd.configurePath(this.currentDirectory + "\\READY TO PRINT\\" + "BILLING RK " + cycle);
+        readyToPrintCycle = pd.configurePath(this.currentDirectory + "\\READY TO PRINT\\" + "REKENING KORAN MAYBANK " + cycle);
         readyToPrintCycleLogProd = pd.configurePath(readyToPrintCycle + "\\LOG PRODUKSI\\");
         readyToPrintCycleLog = pd.configurePath(readyToPrintCycle + "\\LOG RK\\");
         readyToPrintCycleLogKurir = pd.configurePath(readyToPrintCycleLog  + "\\LOG KURIR\\");

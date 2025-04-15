@@ -71,7 +71,7 @@ public class LogModel {
                     "address3 VARCHAR(100) NOT NULL, address4 VARCHAR(100) NOT NULL, address5 VARCHAR(100) NOT NULL, address6 VARCHAR(100) NOT NULL, b1 INT NOT NULL, " +
                     "b2 INT NOT NULL, b3 INT NOT NULL, b4 CHAR(30) NOT NULL, b5 INT NOT NULL, b6 INT NOT NULL, s1 INT NOT NULL, s2 INT NOT NULL, s3 INT NOT NULL, s4 INT NOT NULL, " +
                     "s5 INT NOT NULL, s6 INT NOT NULL, product_name VARCHAR(100) NOT NULL, courier_name VARCHAR(100) NOT NULL, seq_page INT NOT NULL, seq_customer INT NOT NULL, " +
-                    "seq_envelope INT NOT NULL, ss1 CHAR(30) NOT NULL, ss2 VARCHAR(5) NOT NULL, ss3 VARCHAR(100) NOT NULL, ss4 CHAR(30) NOT NULL, ss5 CHAR(30) NOT NULL, ss6 CHAR(30) NOT NULL) ENGINE = MYISAM");
+                    "seq_envelope INT NOT NULL, ss1 CHAR(30) NOT NULL, ss2 VARCHAR(5) NOT NULL, ss3 VARCHAR(100) NOT NULL, ss4 VARCHAR(100) NOT NULL, ss5 CHAR(30) NOT NULL, ss6 CHAR(30) NOT NULL) ENGINE = MYISAM");
             stmt.executeUpdate("ALTER TABLE t_log ADD INDEX tb_log_index1 (product_name,name2)");
             stmt.executeUpdate("ALTER TABLE t_log ADD INDEX tb_log_index2 (product_name)");
             stmt.executeUpdate("ALTER TABLE t_log ADD INDEX tb_log_index3 (courier_name,product_name)");

@@ -50,7 +50,7 @@ public class PdfProcessing {    private int omrSeq = 0;
         dirOutput = params[3];
         dirReport = params[4];
         dirLogScan = params[5];
-        getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", cycle, stmt);
+        getLogOnePdf(dirPdf, DirectoryInput, parentInput, "Rekening Koran", cycle, stmt); // Read Pdf
         uploadLogToDb(DirectoryInput + "Log All.txt", stmt);
 //        barcodeInjector(DirectoryInput,stmt);
         barcodeInjector2(DirectoryInput, cycle, docType,stmt);
@@ -122,7 +122,8 @@ public class PdfProcessing {    private int omrSeq = 0;
             kodeDocument = (jnsDocuemnt.contains("SYARIAH")) ? "S" : "O";
 
             for (int i = 0; i < logModel.getIdCustomer().size(); i++) {
-                String pdfFileName = logModel.getAddress6().get(i);
+//                String pdfFileName = logModel.getAddress6().get(i);
+                String pdfFileName = logModel.getSs4().get(i);
                 System.out.println("Combine ke " + i + ": " + pdfFileName);
 
                 String idCustomer = logModel.getIdCustomer().get(i);

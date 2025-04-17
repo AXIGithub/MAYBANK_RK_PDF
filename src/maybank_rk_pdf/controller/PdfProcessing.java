@@ -153,30 +153,32 @@ public class PdfProcessing {    private int omrSeq = 0;
                 for(int j=1; j <= numberOfPages; j++){
                     seqP++;
                     if( ((j-1) % 6 == 0 && jnsAmplop.contains("A")) || ( (j - 1) % 100 == 0 && jnsAmplop.contains("B") )  && j != 1  ){
-                        seqA++;
+                       if(j!=1)seqA++; 
+                       
                     }
                     barcode = cyBarcode +  kanwil + kodeDocument + txt.norm6Digit(seqA);
-                    isFirstPage = j == 1 ? true : false;
+                    isFirstPage = ((j-1) % 6 == 0 && jnsAmplop.contains("A")) || ( (j - 1) % 100 == 0 && jnsAmplop.contains("B") ) ? true : false;
                     PdfContentByte canvas = stamper.getOverContent(j);
 
-                    if(j == numberOfPages){
-                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR
-                    } else {
-                        drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
-                    }
-                    
-                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
+//                    if(j == numberOfPages){
+//                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR
+//                    } else {
+//                        drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
+//                    }
+//                    
+//                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 643);
                    
                     
                     
 //                    if(j == numberOfPages){
-                    if( (j-1) % 6 == 0 && jnsAmplop.contains("A") ) {    
-                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR
+                    if( ( (j) % 6 == 0 && j!=1 || j == numberOfPages)  && jnsAmplop.contains("A")  ) {
+//                        isFirstPage = true;
+                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR                        
                     } else if(jnsAmplop.contains("A")) {
                         drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
                     }
                     
-                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 655);
+                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 643);
                     
 //                    if(j==1){
 //                    if( (j-1) % 6 == 0 && jnsAmplop.contains("A")) {

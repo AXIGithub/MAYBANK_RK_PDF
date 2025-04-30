@@ -173,12 +173,12 @@ public class PdfProcessing {    private int omrSeq = 0;
 //                    if(j == numberOfPages){
                     if( ( (j) % 6 == 0 && j!=1 || j == numberOfPages)  && jnsAmplop.contains("A")  ) {
 //                        isFirstPage = true;
-                        drawOmr(canvas, -5, 40, 200, true, false, false, false, false, false, false); //Close OMR                        
+                        drawOmr(canvas, 17, 60, 200, true, false, false, false, false, false, false); //Close OMR                        
                     } else if(jnsAmplop.contains("A")) {
-                        drawOmr(canvas, -5, 40, 200, false, false, false, false, false, false, false); //Open OMR
+                        drawOmr(canvas, 17, 60, 200, false, false, false, false, false, false, false); //Open OMR
                     }
                     
-                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 643);
+                    addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 617);
                     
 //                    if(j==1){
 //                    if( (j-1) % 6 == 0 && jnsAmplop.contains("A")) {

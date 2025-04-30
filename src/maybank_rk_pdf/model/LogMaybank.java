@@ -146,8 +146,7 @@ public class LogMaybank {
             Logger.getLogger(LogMaybank.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(LogMaybank.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
     }
     
     public void createLogKanwil(String path, String kategory, Statement stmt){
@@ -215,6 +214,38 @@ public class LogMaybank {
             Logger.getLogger(LogMaybank.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    public void createLogScan(String path, Statement stmt){
+        try {
+            String FileName = "LOG SCAN MAYBANK RK.LOG";
+            ResultSet hasilQuery = null;
+            int seqNum = 0;
+            String query = "SELECT barcode, name1, product_name, courier_name " +
+                    "FROM t_log " +
+                    "WHERE s6 = '1' ORDER BY ss2, courier_name, ss1, seq_envelope ASC";
+            System.out.println("Query log scan : " + query);
+            
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path  + FileName));
+            
+            hasilQuery = stmt.executeQuery(query);
+            while(hasilQuery.next()){
+                seqNum++;
+                String data = 
+                        text.norm6Digit(seqNum) + "\t" +
+                        hasilQuery.getString("barcode") + "\t" +
+                        hasilQuery.getString("name1") + "\t" +
+                        hasilQuery.getString("product_name") + "\t" +
+                        hasilQuery.getString("courier_name") + "\t" + "\r\n";
+                writer.write(data);
+            }
+            writer.flush();
+            writer.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(LogMaybank.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LogMaybank.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

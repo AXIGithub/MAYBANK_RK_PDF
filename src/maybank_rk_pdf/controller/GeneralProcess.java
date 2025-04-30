@@ -73,6 +73,7 @@ public class GeneralProcess {
             logMaybank.createLogAllMaybank(readyToPrintCycleLogMaster, documentType, stmt);
             logMaybank.createLogKanwil(readyToPrintCycleLogMaster,documentType, stmt);
             logMaybank.createLogAllADD40(readyToPrintCycleLogMaster, documentType, stmt);
+            logMaybank.createLogScan(readyToPrintCycleLogScan, stmt);
             
             p01Model.createP01Xls(readyToPrintCycleLog, stmt);
             

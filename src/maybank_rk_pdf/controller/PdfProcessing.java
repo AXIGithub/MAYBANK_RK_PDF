@@ -177,7 +177,7 @@ public class PdfProcessing {    private int omrSeq = 0;
                     } else if(jnsAmplop.contains("A")) {
                         drawOmr(canvas, 17, 60, 200, false, false, false, false, false, false, false); //Open OMR
                     }
-                    
+
                     addTextToPage(isFirstPage, canvas, barcode + "/A:" + txt.norm6Digit(seqA) + "/" +  kurir + "|" + jnsAmplop, barcode , 50 , 617);
                     
 //                    if(j==1){
@@ -251,6 +251,13 @@ public class PdfProcessing {    private int omrSeq = 0;
             canvas.setFontAndSize(bf, 6);
             canvas.setTextMatrix(x,y-10);
             canvas.showText(text);
+            canvas.endText();
+            
+            BaseFont fontBold = BaseFont.createFont(BaseFont.COURIER_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+            canvas.beginText();
+            canvas.setFontAndSize(fontBold, 11);
+            canvas.setTextMatrix(x,710);
+            canvas.showText("Kepada Yth:");
             canvas.endText();
             
            

@@ -28,7 +28,7 @@ public class P01Model {
         try {
             
             ResultSet hasilQuery = null;
-            String query = "SELECT courier_name AS NFILE, name2 AS KCAB, ss3 AS CABANG, COUNT(id_customer) AS JUMLAH_LEMBAR, SUM(s6) AS JUMLAH_AMPLOP, s1 AS KANWIL " +
+            String query = "SELECT courier_name AS NFILE, name2 AS KCAB, ss3 AS CABANG, COUNT(id_customer) AS JUMLAH_LEMBAR, COUNT(DISTINCT id_customer) AS JUMLAH_ACCOUNT, SUM(s6) AS JUMLAH_AMPLOP, s1 AS KANWIL " +
                     "FROM t_log " +
                     "GROUP BY courier_name, name2, s1 " +
                     "ORDER BY s1, courier_name, name2";
@@ -38,6 +38,7 @@ public class P01Model {
                 String courierName = hasilQuery.getString("NFILE");
                 String kcab = hasilQuery.getString("KCAB");
                 String cabang = hasilQuery.getString("CABANG");
+                int jumlahAcc = hasilQuery.getInt("JUMLAH_ACCOUNT");
                 int jumlahLembar = hasilQuery.getInt("JUMLAH_LEMBAR");
                 int jumlahAmplop = hasilQuery.getInt("JUMLAH_AMPLOP");
                 int kanwil = hasilQuery.getInt("KANWIL");
@@ -57,7 +58,7 @@ public class P01Model {
                 writer.write(courierName + "\t" +
                              kcab + "\t" +
                              cabang + "\t" +
-                             jumlahLembar + "\t" +
+                             jumlahAcc + "\t" +
                              jumlahLembar + "\t" +
                              jumlahAmplop);
                 writer.newLine();

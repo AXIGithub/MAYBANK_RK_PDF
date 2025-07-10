@@ -1072,6 +1072,20 @@ private static final String[] ANGKA = {"", "satu", "dua", "tiga", "empat", "lima
         }
         return S;
     }
+    
+    public String sanitizeFileName(String input) {
+        // Daftar karakter invalid di Windows
+        String invalidChars = "[<>:/|?*\"]";
+        if(input.contains("NCS")){
+            return "NCS";
+        } else if(input.contains("POS")){
+            return "POS";
+        } else if(input.contains("SAP")){
+            return "SAP";
+        } else {
+            return input.replaceAll(invalidChars, "");
+        }                    
+    }
 
 
 }

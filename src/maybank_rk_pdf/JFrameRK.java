@@ -53,7 +53,6 @@ public class JFrameRK extends javax.swing.JFrame {
     public String readyToPrintCySortingDirectory = new String();
     public JFrameRK() {
         initComponents();
-        System.out.println("Init");
         this.setLocationRelativeTo(null);
         init();
     }
@@ -333,15 +332,16 @@ public class JFrameRK extends javax.swing.JFrame {
            long endProcess = System.currentTimeMillis();
            
            long duration = endProcess - startRun; 
-            long seconds = (duration / 1000) % 60;
-            long minutes = (duration / (1000 * 60)) % 60;
-            long hours = (duration / (1000 * 60 * 60)) % 24;
+           long seconds = (duration / 1000) % 60;
+           long minutes = (duration / (1000 * 60)) % 60;
+           long hours = (duration / (1000 * 60 * 60)) % 24;
             
-            String durationFinal = String.format("Durasi: %02d:%02d:%02d\n", hours, minutes, seconds);
-            jTextArea1.append("\r\n" + durationFinal);
+           String durationFinal = String.format("Durasi: %02d:%02d:%02d\n", hours, minutes, seconds);
+           jTextArea1.append("\r\n" + durationFinal);
             
-            System.out.printf(durationFinal);
-           
+           System.out.printf(durationFinal);
+           jButton1.setEnabled(false);
+           jButton2.setEnabled(false);
        } catch (SQLException ex) {
            Logger.getLogger(JFrameRK.class.getName()).log(Level.SEVERE, null, ex);
        }

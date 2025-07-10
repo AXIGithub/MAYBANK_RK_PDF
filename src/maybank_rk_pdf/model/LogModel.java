@@ -199,15 +199,32 @@ public class LogModel {
             //        stmt.executeUpdate("UPDATE t_log SET courier_name = 'POS' WHERE s1 IN (3,6)");
 //        stmt.executeUpdate("UPDATE t_log SET courier_name = 'NCS' WHERE s1 NOT IN (3,6)");
         // Cara 2
-        String quiery = "UPDATE t_log SET courier_name = CASE " +
+        String query = "UPDATE t_log SET courier_name = CASE " +
                 "WHEN s1 IN (3,6) THEN 'POS'"+
                 "ELSE 'NCS' END";
-        int totalRow = stmt.executeUpdate(quiery);
+        int totalRow = stmt.executeUpdate(query);
         System.out.println("Update rows : " + totalRow);
         } catch (SQLException ex) {
             Logger.getLogger(LogModel.class.getName()).log(Level.SEVERE, "Error update courier", ex);
         }
     }
+    
+    public void setKurirByPostCode(Statement stmt) throws SQLException {
+        // Untuk kode pos valid yang berada dalam range
+        String query = "UPDATE t_log JOIN t_courier_zip_code c " +
+                       "ON CAST(t_log.address6 AS UNSIGNED) BETWEEN c.awal AND c.akhir " + 
+                       "SET t_log.courier_name = c.kurir " +
+                       "WHERE t_log.address6 REGEXP '^[0-9]+$' AND t_log.address6 != '00000'";
+
+        // Untuk kode pos tidak valid (tidak numerik atau 00000), default ke SAP
+        String query2 = "UPDATE t_log SET courier_name = 'SAP' " +
+                        "WHERE address6 NOT REGEXP '^[0-9]+$' OR address6 = '00000'";
+
+        System.out.println("setKurirByPostCode : " + query);
+        stmt.executeUpdate(query);
+        stmt.executeUpdate(query2);
+    }
+
 
     public ArrayList<Integer> getIdLog() {
         return idLog;
